@@ -19,16 +19,20 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            /*
             Todo_appTheme {
+                NavRoute()
+
+                /*
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
+                */
+
+
             }
-             */
         }
     }
 }
