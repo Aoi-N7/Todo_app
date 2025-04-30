@@ -53,3 +53,15 @@ fun NavRoute(){
     }
 }
 
+// トップバー(タイトル)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopBar(navController: NavController) {
+    TopAppBar(
+        title = { Text("Todoアプリ") },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color(0xFFFEF4F4) // 背景色を#FEF4F4に設定
+        )
+    )
+}
+
