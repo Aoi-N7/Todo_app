@@ -1,3 +1,8 @@
+/**
+ * 制作実習Ⅱ 第一期個人制作
+ * @author 0J01028 中村蒼
+ */
+
 package com.example.todo_app
 
 // タグデータ

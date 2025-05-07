@@ -1,3 +1,8 @@
+/**
+ * 制作実習Ⅱ 第一期個人制作
+ * @author 0J01028 中村蒼
+ */
+
 package com.example.todo_app
 
 import androidx.compose.foundation.background
@@ -57,6 +62,7 @@ fun NavRoute(){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(navController: NavController) {
+    // トップバーの設定
     TopAppBar(
         title = { Text("Todoアプリ") },
         colors = TopAppBarDefaults.topAppBarColors(
