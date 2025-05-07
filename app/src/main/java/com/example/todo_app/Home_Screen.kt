@@ -38,6 +38,12 @@ import androidx.compose.animation.AnimatedVisibility
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home_Screen(navController: NavController){
+    // タスク作成ボタンのクリック判定
+    var CreateTask by remember { mutableStateOf(false) }
+
+    // タグ作成ボタンのクリック判定
+    var CreateTag by remember { mutableStateOf(false) }
+
     // メイン画面のレイアウト
     Column(
         modifier = Modifier
@@ -83,7 +89,49 @@ fun Home_Screen(navController: NavController){
                 )
             }
 
+            // 現在の予定
+            item {
+                // 現在の予定ヘッダー
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color(0xFFEEEEEE))
+                        .clickable { CreateTask = true }
+                        .padding(8.dp),
+                    color = Color(0xFFEEEEEE)
+                ) {
+                    // ヘッダーの内容
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "現在の予定",
+                            fontSize = 18.sp
+                        )
+                        // プラスアイコン
+                        IconButton(
+                            onClick = { CreateTask = true }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "追加",
+                                tint = Color(0xFFFF9800) // オレンジ色
+                            )
+                        }
+                    }
+                }
 
+                // 区切り線
+                Divider(
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    color = Color.Gray.copy(alpha = 0.3f)
+                )
+
+
+            }
         }
     }
 }
