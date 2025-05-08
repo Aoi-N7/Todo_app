@@ -11,5 +11,5 @@ data class Task(
     val title: String,      // タイトル
     val date: String,       // 日付
     val time: String,       // 時刻
-    val tag: String? = null     // タグ
+    val tag: Int     // タグ
 )

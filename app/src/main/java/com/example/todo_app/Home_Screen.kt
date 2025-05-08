@@ -7,7 +7,6 @@ package com.example.todo_app
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
@@ -22,7 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.*
@@ -30,19 +28,60 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.window.Dialog
-import androidx.compose.animation.AnimatedVisibility
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home_Screen(navController: NavController){
+    // 選択されたタスクのIDリスト
+    var selectedTasks by remember { mutableStateOf(listOf<String>()) }
+
+    // 選択されたタグのIDリスト
+    var selectedTags by remember { mutableStateOf(listOf<String>()) }
+
     // タスク作成ボタンのクリック判定
     var CreateTask by remember { mutableStateOf(false) }
 
     // タグ作成ボタンのクリック判定
     var CreateTag by remember { mutableStateOf(false) }
+
+    // チェックボックスでの選択
+    val isSelectionActive = selectedTasks.isNotEmpty() || selectedTags.isNotEmpty()
+    val isTaskSelectionActive = selectedTasks.isNotEmpty()
+    val isTagSelectionActive = selectedTags.isNotEmpty()
+
+    // 仮タスク
+    var tasks by remember {
+        mutableStateOf(
+            listOf(
+                Task(
+                    id = "0",
+                    title = "タスク名",
+                    date = "1月1日",
+                    time = "10:21",
+                    tag = 1
+                ),
+                Task(
+                    id = "1",
+                    title = "誕生日プレゼント決め",
+                    date = "4月1日",
+                    time = "12:00",
+                    tag = 2
+                )
+            )
+        )
+    }
+
+    // 仮タスク
+    var tags by remember {
+        mutableStateOf(
+            listOf(
+                Tag(id = "0", name = "仕事", color = Color(0xFFE3F2FD)), // 薄い青色
+                Tag(id = "1", name = "プライベート", color = Color(0xFFE8F5E9)), // 薄い緑色
+                Tag(id = "2", name = "自治会", color = Color(0xFFF8BBD0)) // 薄いピンク色
+            )
+        )
+    }
 
     // メイン画面のレイアウト
     Column(
@@ -130,6 +169,87 @@ fun Home_Screen(navController: NavController){
                     color = Color.Gray.copy(alpha = 0.3f)
                 )
 
+                // タスクリスト
+                tasks.forEach { task ->
+                    // 各タスクのアイテム
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        // チェックボックス（タグ選択時は無効化）
+                        Box(
+                            modifier = Modifier
+                                .size(24.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = if (isTagSelectionActive) Color.Gray.copy(alpha = 0.5f) else Color(0xFF2196F3),
+                                    shape = RoundedCornerShape(2.dp)
+                                )
+                                .background(
+                                    if (isTagSelectionActive) Color.Gray.copy(alpha = 0.1f) else Color.Transparent,
+                                    RoundedCornerShape(2.dp)
+                                )
+                                .clickable(enabled = !isTagSelectionActive) {
+                                    // タスク選択のトグル処理
+                                    selectedTasks = if (selectedTasks.contains(task.id)) {
+                                        selectedTasks.filter { it != task.id }
+                                    } else {
+                                        selectedTasks + task.id
+                                    }
+                                },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            // 選択されている場合はチェックマークを表示
+                            if (selectedTasks.contains(task.id)) {
+                                Icon(
+                                    imageVector = Icons.Default.Check,
+                                    contentDescription = "選択済み",
+                                    tint = Color(0xFF2196F3),
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        // タスクの内容
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(8.dp)),
+                            color = tags.getOrNull(task.tag)?.color ?: Color.White
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(12.dp)
+                            ) {
+                                // タスク名
+                                Text(
+                                    text = task.title,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                // タグ名
+                                tags.getOrNull(task.tag)?.let {
+                                    Text(
+                                        text = it.name,
+                                        fontSize = 14.sp,
+                                        color = Color.Gray
+                                    )
+                                }
+                                // タスクの期間（存在する場合）
+                                task.date?.let {
+                                    Text(
+                                        text = it,
+                                        fontSize = 14.sp,
+                                        modifier = Modifier.fillMaxWidth(),
+                                        textAlign = TextAlign.End
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
 
             }
         }
