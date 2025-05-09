@@ -45,6 +45,9 @@ fun Home_Screen(navController: NavController){
     // タグ作成ボタンのクリック判定
     var CreateTag by remember { mutableStateOf(false) }
 
+    // タグダイアログの表示状態
+    var tagDialogOpen by remember { mutableStateOf(false) }
+
     // チェックボックスでの選択
     val isSelectionActive = selectedTasks.isNotEmpty() || selectedTags.isNotEmpty()
     val isTaskSelectionActive = selectedTasks.isNotEmpty()
@@ -128,7 +131,7 @@ fun Home_Screen(navController: NavController){
                 )
             }
 
-            // 現在の予定
+            // 現在のタスク
             item {
                 // 現在の予定ヘッダー
                 Surface(
@@ -169,89 +172,24 @@ fun Home_Screen(navController: NavController){
                     color = Color.Gray.copy(alpha = 0.3f)
                 )
 
-                // タスクリスト
-                tasks.forEach { task ->
-                    // 各タスクのアイテム
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp),
-                        verticalAlignment = Alignment.Top
-                    ) {
-                        // チェックボックス（タグ選択時は無効化）
-                        Box(
-                            modifier = Modifier
-                                .size(24.dp)
-                                .border(
-                                    width = 1.dp,
-                                    color = if (isTagSelectionActive) Color.Gray.copy(alpha = 0.5f) else Color(0xFF2196F3),
-                                    shape = RoundedCornerShape(2.dp)
-                                )
-                                .background(
-                                    if (isTagSelectionActive) Color.Gray.copy(alpha = 0.1f) else Color.Transparent,
-                                    RoundedCornerShape(2.dp)
-                                )
-                                .clickable(enabled = !isTagSelectionActive) {
-                                    // タスク選択のトグル処理
-                                    selectedTasks = if (selectedTasks.contains(task.id)) {
-                                        selectedTasks.filter { it != task.id }
-                                    } else {
-                                        selectedTasks + task.id
-                                    }
-                                },
-                            contentAlignment = Alignment.Center
-                        ) {
-                            // 選択されている場合はチェックマークを表示
-                            if (selectedTasks.contains(task.id)) {
-                                Icon(
-                                    imageVector = Icons.Default.Check,
-                                    contentDescription = "選択済み",
-                                    tint = Color(0xFF2196F3),
-                                    modifier = Modifier.size(16.dp)
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.width(8.dp))
-
-                        // タスクの内容
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(8.dp)),
-                            color = tags.getOrNull(task.tag)?.color ?: Color.White
-                        ) {
-                            Column(
-                                modifier = Modifier.padding(12.dp)
-                            ) {
-                                // タスク名
-                                Text(
-                                    text = task.title,
-                                    fontWeight = FontWeight.Medium
-                                )
-                                // タグ名
-                                tags.getOrNull(task.tag)?.let {
-                                    Text(
-                                        text = it.name,
-                                        fontSize = 14.sp,
-                                        color = Color.Gray
-                                    )
-                                }
-                                // タスクの期間（存在する場合）
-                                task.date?.let {
-                                    Text(
-                                        text = it,
-                                        fontSize = 14.sp,
-                                        modifier = Modifier.fillMaxWidth(),
-                                        textAlign = TextAlign.End
-                                    )
-                                }
-                            }
+                // タスクリストの表示
+                ShowTasks(
+                    tasks = tasks,
+                    tags = tags,
+                    selectedTasks = selectedTasks,
+                    isTagSelectionActive = isTagSelectionActive,
+                    onTaskToggle = { taskId ->
+                        selectedTasks = if (selectedTasks.contains(taskId)) {
+                            selectedTasks.filter { it != taskId }
+                        } else {
+                            selectedTasks + taskId
                         }
                     }
-                }
+                )
 
             }
+
         }
+
     }
 }

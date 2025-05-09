@@ -38,7 +38,7 @@ fun ShowTasks(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp),
-            verticalAlignment = Alignment.Top       // 上揃え
+            verticalAlignment = Alignment.Top       // 上に配置
         ) {
             // チェックボックス（タグ選択時は無効化）
             Box(
@@ -56,7 +56,7 @@ fun ShowTasks(
                     .clickable(enabled = !isTagSelectionActive) {
                         onTaskToggle(task.id)
                     },
-                contentAlignment = Alignment.Center     // 中央揃え
+                contentAlignment = Alignment.Center     // 中央に配置
             ) {
                 // 選択時のチェックアイコンの表示
                 if (selectedTasks.contains(task.id)) {
@@ -93,7 +93,7 @@ fun ShowTasks(
                             text = it,
                             fontSize = 14.sp,
                             modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.End
+                            textAlign = TextAlign.End       // 右下に配置
                         )
                     }
                 }
