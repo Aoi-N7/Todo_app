@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 
+// タスク一覧の表示
 @Composable
 fun ShowTasks(
     tasks: List<Task>,      // 表示するタスクのリスト
@@ -54,6 +55,7 @@ fun ShowTasks(
                         RoundedCornerShape(2.dp)
                     )
                     .clickable(enabled = !isTagSelectionActive) {
+                        // タスク選択モードに切り替え
                         onTaskToggle(task.id)
                     },
                 contentAlignment = Alignment.Center     // 中央に配置
@@ -96,6 +98,78 @@ fun ShowTasks(
                             textAlign = TextAlign.End       // 右下に配置
                         )
                     }
+                }
+            }
+        }
+    }
+}
+
+// タグ一覧の表示
+@Composable
+fun ShowTags(
+    tags: List<Tag>, // 表示するタグのリスト
+    selectedTags: List<String>, // 選択されているタグのIDリスト
+    isTaskSelectionActive: Boolean, // 選択モード(タスク)か判定
+    onTagToggle: (String) -> Unit // 選択モードの切り替え用
+) {
+    // タグ一覧を表示
+    tags.forEach { tag ->
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
+            verticalAlignment = Alignment.Top       // 上に配置
+        ) {
+            // チェックボックス（タグ選択時は無効化）
+            Box(
+                modifier = Modifier
+                    .size(24.dp)
+                    .border(
+                        width = 1.dp,
+                        color = if (isTaskSelectionActive) Color.Gray.copy(alpha = 0.5f) else Color(0xFF2196F3),
+                        shape = RoundedCornerShape(2.dp)        // 枠の角を丸く
+                    )
+                    .background(
+                        if (isTaskSelectionActive) Color.Gray.copy(alpha = 0.1f) else Color.Transparent,
+                        RoundedCornerShape(2.dp)
+                    )
+                    .clickable(enabled = !isTaskSelectionActive) {
+                        // タグ選択モードに切り替え
+                        onTagToggle(tag.id)
+                    },
+                contentAlignment = Alignment.Center     // 中央に配置
+            ) {
+                // 選択時のチェックアイコンの表示
+                if (selectedTags.contains(tag.id)) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "選択済み",
+                        tint = Color(0xFF2196F3),
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            // タグの内容を表示
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp)),        // 枠の角を丸く
+                color = tag.color      // 背景の設定(タグの色)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    contentAlignment = Alignment.Center     // 中央に配置
+                ) {
+                    // タグ名
+                    Text(
+                        text = tag.name,
+                        fontWeight = FontWeight.Medium
+                    )
                 }
             }
         }
