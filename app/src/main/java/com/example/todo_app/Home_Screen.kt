@@ -187,9 +187,69 @@ fun Home_Screen(navController: NavController){
                     }
                 )
 
+
             }
 
+            // タグ一覧セクション
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // タグ一覧ヘッダー（クリック可能な灰色の枠）
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color(0xFFEEEEEE))
+                        .clickable { tagDialogOpen = true }
+                        .padding(8.dp),
+                    color = Color(0xFFEEEEEE)
+                ) {
+                    // ヘッダーの内容（タイトルとプラスボタン）
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "タグ一覧",
+                            fontSize = 18.sp
+                        )
+                        // プラスボタン
+                        IconButton(
+                            onClick = { tagDialogOpen = true }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "追加",
+                                tint = Color(0xFFFF9800) // オレンジ色
+                            )
+                        }
+                    }
+                }
+
+                // 区切り線
+                Divider(
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    color = Color.Gray.copy(alpha = 0.3f)
+                )
+
+                // タグリスト
+                ShowTags(
+                    tags = tags,
+                    selectedTags = selectedTags,
+                    isTaskSelectionActive = isTaskSelectionActive,
+                    onTagToggle = { tagId ->
+                        selectedTags = if (selectedTags.contains(tagId)) {
+                            selectedTags.filter { it != tagId }
+                        } else {
+                            selectedTags + tagId
+                        }
+                    }
+                )
+
+            }
         }
 
+        // アクションボタン（選択時のみ表示）UI作成後に取り組み予定
     }
 }
