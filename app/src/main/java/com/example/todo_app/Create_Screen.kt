@@ -94,6 +94,8 @@ fun Create_Screen(navController: NavController) {
             // 時間
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)   // テキストとフィールドの間のスペース
             ) {
+                Spacer(modifier = Modifier.height(24.dp))     // 位置調整スペース
+
                 // 入力項目名の表示
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -146,11 +148,14 @@ fun InputField(
     value: String,      // 入力値
     onValueChange: (String) -> Unit
 ) {
+
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),   // テキストとフィールドの間のスペース
         modifier = Modifier
             .fillMaxWidth()
     ) {
+        Spacer(modifier = Modifier.height(24.dp))     // 位置調整スペース
+
         // 入力項目名の表示
         Row(
             verticalAlignment = Alignment.CenterVertically,
