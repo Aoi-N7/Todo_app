@@ -92,6 +92,7 @@ fun Home_Screen(navController: NavController){
             .fillMaxSize()
             .background(Color(0xFFF5F5F5)) // 背景色を薄いグレーに設定
     ) {
+        // トップバーの表示
         TopBar(navController)
 
         // スクロール可能なコンテンツ
