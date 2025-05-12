@@ -35,6 +35,9 @@ fun Create_Screen(navController: NavController) {
     // タグの入力値
     var tag_in by remember { mutableStateOf("") }
 
+    // 日付の入力値
+    var date_in by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -68,6 +71,13 @@ fun Create_Screen(navController: NavController) {
             section = "タグ",
             value = tag_in,
             onValueChange = { tag_in = it }
+        )
+
+        // 日付
+        InputField(
+            section = "日付",
+            value = date_in,
+            onValueChange = { date_in = it }
         )
 
     }
