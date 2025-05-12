@@ -24,7 +24,7 @@ import androidx.navigation.compose.rememberNavController
 // 画面遷移先
 enum class Screen {
     Home_Screen,    // ホーム画面
-    Edit_Screen,    // 編集画面
+    Create_Screen,    // 編集画面
     TaskList_Screen,    //音投稿準備画面
 }
 
@@ -37,18 +37,18 @@ fun NavRoute(){
     //NavHostの作成,設定
     NavHost(navController = navController,
         // 最初に表示するページ
-        startDestination = Screen.Home_Screen.name
+        startDestination = Screen.Create_Screen.name
     ) {
         // ルート名：Home_Screen　ホーム画面に遷移
         composable(route = Screen.Home_Screen.name) {
             Home_Screen(navController = navController)
         }
-/*
+
         // ルート名：Create_Screen　作成画面に遷移
-        composable(route = Nav.Create_Screen.name) {
+        composable(route = Screen.Create_Screen.name) {
             Create_Screen(navController = navController)
         }
-*/
+
 /*
         // ルート名：TaskList_Screen　タスク一覧画面に遷移
         composable(route = Nav.TaskList_Screen.name) {

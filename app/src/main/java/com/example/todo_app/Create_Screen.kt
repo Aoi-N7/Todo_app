@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,6 +29,9 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Create_Screen(navController: NavController) {
+    // タイトルの入力値
+    var task_in by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -48,6 +52,68 @@ fun Create_Screen(navController: NavController) {
                 tint = Color.Gray
             )
         }
+
+        // タスク名
+        InputField(
+            section = "予定",
+            value = task_in,
+            onValueChange = { task_in = it }
+        )
+
     }
 }
+
+// 項目と入力フィールドの表示
+@Composable
+fun InputField(
+    section: String,        // 入力項目
+    value: String,      // 入力値
+    onValueChange: (String) -> Unit
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp),   // テキストとフィールドの間のスペース
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 18.dp) // 左右のスペース
+    ) {
+        // テキストの表示
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = section,     // 入力項目
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Normal
+            )
+        }
+
+        // 入力フィールド
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = Color(0xFFF5F5F5),
+                    shape = RoundedCornerShape(4.dp)        // 枠の角を丸く
+                )
+                .padding(14.dp)      // 内側にスペース
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                BasicTextField(
+                    value = value,      // 入力値
+                    onValueChange = onValueChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    textStyle = TextStyle(
+                        fontSize = 16.sp
+                    )
+                )
+            }
+        }
+
+    }
+}
+
+
 
