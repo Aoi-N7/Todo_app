@@ -38,6 +38,12 @@ fun Create_Screen(navController: NavController) {
     // 日付の入力値
     var date_in by remember { mutableStateOf("") }
 
+    // 開始時刻の入力値
+    var starttime_in by remember { mutableStateOf("") }
+
+    // 終了時刻の入力値
+    var endtime_in by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -59,31 +65,81 @@ fun Create_Screen(navController: NavController) {
             )
         }
 
-        // タスク名
-        InputField(
-            section = "予定",
-            value = task_in,
-            onValueChange = { task_in = it }
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 18.dp) // 左右のスペース
+        ){
+            // タスク名
+            InputField(
+                section = "予定",
+                value = task_in,
+                onValueChange = { task_in = it }
+            )
 
-        // タグ名
-        InputField(
-            section = "タグ",
-            value = tag_in,
-            onValueChange = { tag_in = it }
-        )
+            // タグ名
+            InputField(
+                section = "タグ",
+                value = tag_in,
+                onValueChange = { tag_in = it }
+            )
 
-        // 日付
-        InputField(
-            section = "日付",
-            value = date_in,
-            onValueChange = { date_in = it }
-        )
+            // 日付
+            InputField(
+                section = "日付",
+                value = date_in,
+                onValueChange = { date_in = it }
+            )
+
+            // 時間
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)   // テキストとフィールドの間のスペース
+            ) {
+                // 入力項目名の表示
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = "時間",    // 入力項目
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
+
+                // 入力フィールド
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // 開始時間の入力フィールド
+                    TimeInputField(
+                        value = starttime_in,
+                        onValueChange = { starttime_in = it },
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    // 区切り文字"～"の表示
+                    Text(
+                        text = "〜",
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(horizontal = 18.dp)
+                    )
+
+                    // 終了時間の入力フィールド
+                    TimeInputField(
+                        value = endtime_in,
+                        onValueChange = { endtime_in = it },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+        }
+
 
     }
 }
 
-// 項目と入力フィールドの表示
+// 項目と入力フィールドの表示(時間以外)
 @Composable
 fun InputField(
     section: String,        // 入力項目
@@ -94,9 +150,8 @@ fun InputField(
         verticalArrangement = Arrangement.spacedBy(8.dp),   // テキストとフィールドの間のスペース
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 18.dp) // 左右のスペース
     ) {
-        // テキストの表示
+        // 入力項目名の表示
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
@@ -135,5 +190,32 @@ fun InputField(
     }
 }
 
+// 短めの入力フィールドの表示(時間用)
+@Composable
+fun TimeInputField(
+    value: String,      // 入力値
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .background(
+                color = Color(0xFFF5F5F5),
+                shape = RoundedCornerShape(4.dp)        // 枠の角を丸く
+            )
+            .padding(14.dp)      // 内側にスペース
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            BasicTextField(
+                value = value,      // 入力値
+                onValueChange = onValueChange,
+                modifier = Modifier.fillMaxWidth(),
+                textStyle = TextStyle(
+                    fontSize = 16.sp
+                )
+            )
+        }
+    }
+}
 
 
