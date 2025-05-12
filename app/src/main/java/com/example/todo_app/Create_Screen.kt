@@ -94,7 +94,7 @@ fun Create_Screen(navController: NavController) {
             // 時間
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)   // テキストとフィールドの間のスペース
             ) {
-                Spacer(modifier = Modifier.height(24.dp))     // 位置調整スペース
+                Spacer(modifier = Modifier.height(16.dp))     // 位置調整スペース
 
                 // 入力項目名の表示
                 Row(
@@ -135,10 +135,29 @@ fun Create_Screen(navController: NavController) {
                     )
                 }
             }
+
+            // 作成ボタン
+            Button(
+                onClick = { /* 作成処理 */ },
+                modifier = Modifier
+                    .padding(top = 40.dp)
+                    .align(Alignment.End),      // 右端に配置
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF4285F4)
+                )
+            ) {
+                // ボタンの表示文字
+                Text(
+                    text = "作成",
+                    fontSize = 18.sp,
+                    color = Color.White,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                )
+            }
         }
 
-
     }
+
 }
 
 // 項目と入力フィールドの表示(時間以外)
@@ -154,7 +173,7 @@ fun InputField(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        Spacer(modifier = Modifier.height(24.dp))     // 位置調整スペース
+        Spacer(modifier = Modifier.height(16.dp))     // 位置調整スペース
 
         // 入力項目名の表示
         Row(
