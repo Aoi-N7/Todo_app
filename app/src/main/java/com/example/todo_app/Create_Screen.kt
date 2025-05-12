@@ -29,8 +29,11 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Create_Screen(navController: NavController) {
-    // タイトルの入力値
+    // タスク名の入力値
     var task_in by remember { mutableStateOf("") }
+
+    // タグの入力値
+    var tag_in by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -58,6 +61,13 @@ fun Create_Screen(navController: NavController) {
             section = "予定",
             value = task_in,
             onValueChange = { task_in = it }
+        )
+
+        // タグ名
+        InputField(
+            section = "タグ",
+            value = tag_in,
+            onValueChange = { tag_in = it }
         )
 
     }
