@@ -44,9 +44,9 @@ fun NavRoute(){
             Home_Screen(navController = navController)
         }
 /*
-        // ルート名：Edit_Screen　編集画面に遷移
-        composable(route = Nav.Edit_Screen.name) {
-            Edit_Screen(navController = navController)
+        // ルート名：Create_Screen　作成画面に遷移
+        composable(route = Nav.Create_Screen.name) {
+            Create_Screen(navController = navController)
         }
 */
 /*

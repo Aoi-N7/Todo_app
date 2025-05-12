@@ -29,7 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 
-
+// ホーム画面
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home_Screen(navController: NavController){
