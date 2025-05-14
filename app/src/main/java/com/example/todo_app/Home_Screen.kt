@@ -75,7 +75,7 @@ fun Home_Screen(navController: NavController){
         )
     }
 
-    // 仮タスク
+    // 仮タグ
     var tags by remember {
         mutableStateOf(
             listOf(
