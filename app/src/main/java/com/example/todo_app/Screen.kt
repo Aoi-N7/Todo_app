@@ -37,7 +37,7 @@ fun NavRoute(){
     //NavHostの作成,設定
     NavHost(navController = navController,
         // 最初に表示するページ
-        startDestination = Screen.Create_Screen.name
+        startDestination = Screen.TaskList_Screen.name
     ) {
         // ルート名：Home_Screen　ホーム画面に遷移
         composable(route = Screen.Home_Screen.name) {
@@ -49,12 +49,11 @@ fun NavRoute(){
             Create_Screen(navController = navController)
         }
 
-/*
         // ルート名：TaskList_Screen　タスク一覧画面に遷移
-        composable(route = Nav.TaskList_Screen.name) {
+        composable(route = Screen.TaskList_Screen.name) {
             TaskList_Screen(navController = navController)
         }
-*/
+
     }
 }
 
