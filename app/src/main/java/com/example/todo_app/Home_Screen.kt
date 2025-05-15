@@ -245,7 +245,8 @@ fun Home_Screen(navController: NavController){
                         } else {
                             selectedTags + tagId
                         }
-                    }
+                    },
+                    nav = navController
                 )
 
             }

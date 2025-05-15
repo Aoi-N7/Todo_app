@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavController
 
 // タスク一覧の表示
 @Composable
@@ -110,14 +111,16 @@ fun ShowTags(
     tags: List<Tag>, // 表示するタグのリスト
     selectedTags: List<String>, // 選択されているタグのIDリスト
     isTaskSelectionActive: Boolean, // 選択モード(タスク)か判定
-    onTagToggle: (String) -> Unit // 選択モードの切り替え用
+    onTagToggle: (String) -> Unit, // 選択モードの切り替え用
+    nav: NavController
 ) {
     // タグ一覧を表示
     tags.forEach { tag ->
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp),
+                .padding(vertical = 4.dp)
+                .clickable{ nav.navigate("TaskList_Screen") },  // クリック時の遷移先
             verticalAlignment = Alignment.Top       // 上に配置
         ) {
             // チェックボックス（タグ選択時は無効化）
