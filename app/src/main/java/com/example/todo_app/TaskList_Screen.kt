@@ -12,6 +12,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.material3.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,6 +56,27 @@ fun TaskList_Screen(navController: NavController) {
                 Task(
                     id = "1",
                     title = "誕生日プレゼント決め",
+                    date = "4月1日",
+                    time = "12:00",
+                    tag = 2
+                ),
+                Task(
+                    id = "2",
+                    title = "食事",
+                    date = "4月1日",
+                    time = "12:00",
+                    tag = 2
+                ),
+                Task(
+                    id = "3",
+                    title = "買い物",
+                    date = "4月1日",
+                    time = "12:00",
+                    tag = 2
+                ),
+                Task(
+                    id = "4",
+                    title = "旅行",
                     date = "4月1日",
                     time = "12:00",
                     tag = 2
@@ -115,25 +137,28 @@ fun TaskList_Screen(navController: NavController) {
                     .fillMaxSize()
                     .background(Color(0xFFFDEFF2))
             ) {
-                Column(
+                // スクロール可能
+                LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(start = 15.dp, end = 15.dp)        // 左右にスペース
                 ) {
-                    // タスクリストの表示
-                    ShowTasks(
-                        tasks = tasks,
-                        tags = tags,
-                        selectedTasks = selectedTasks,
-                        isTagSelectionActive = isTagSelectionActive,
-                        onTaskToggle = { taskId ->
-                            selectedTasks = if (selectedTasks.contains(taskId)) {
-                                selectedTasks.filter { it != taskId }
-                            } else {
-                                selectedTasks + taskId
+                    item{
+                        // タスクリストの表示
+                        ShowTasks(
+                            tasks = tasks,
+                            tags = tags,
+                            selectedTasks = selectedTasks,
+                            isTagSelectionActive = isTagSelectionActive,
+                            onTaskToggle = { taskId ->
+                                selectedTasks = if (selectedTasks.contains(taskId)) {
+                                    selectedTasks.filter { it != taskId }
+                                } else {
+                                    selectedTasks + taskId
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         }

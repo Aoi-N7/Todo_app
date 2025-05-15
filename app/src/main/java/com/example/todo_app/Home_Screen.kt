@@ -95,7 +95,7 @@ fun Home_Screen(navController: NavController){
         // トップバーの表示
         TopBar(navController)
 
-        // スクロール可能なコンテンツ
+        // スクロール可能
         LazyColumn(
             modifier = Modifier
                 .weight(1f)
