@@ -63,7 +63,7 @@ fun NavRoute(){
 fun TopBar(navController: NavController) {
     // トップバーの設定
     TopAppBar(
-        title = { Text("Todoアプリ") },
+        title = { Text("Todoアプリ　＞　ホーム画面") },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color(0xFFFEF4F4) // 背景色を#FEF4F4に設定
         )
