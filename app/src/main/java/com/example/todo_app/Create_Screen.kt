@@ -29,6 +29,60 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Create_Screen(navController: NavController) {
+    // 仮タスク
+    var tasks by remember {
+        mutableStateOf(
+            listOf(
+                Task(
+                    id = "0",
+                    title = "タスク名",
+                    date = "1月1日",
+                    time = "10:21",
+                    tag = 1
+                ),
+                Task(
+                    id = "1",
+                    title = "誕生日プレゼント決め",
+                    date = "4月1日",
+                    time = "12:00",
+                    tag = 2
+                ),
+                Task(
+                    id = "2",
+                    title = "食事",
+                    date = "4月1日",
+                    time = "12:00",
+                    tag = 2
+                ),
+                Task(
+                    id = "3",
+                    title = "買い物",
+                    date = "4月1日",
+                    time = "12:00",
+                    tag = 2
+                ),
+                Task(
+                    id = "4",
+                    title = "旅行",
+                    date = "4月1日",
+                    time = "12:00",
+                    tag = 2
+                )
+            )
+        )
+    }
+
+    // 仮タグ
+    var tags by remember {
+        mutableStateOf(
+            listOf(
+                Tag(id = "0", name = "仕事", color = Color(0xFFE3F2FD)), // 薄い青色
+                Tag(id = "1", name = "プライベート", color = Color(0xFFE8F5E9)), // 薄い緑色
+                Tag(id = "2", name = "自治会", color = Color(0xFFF8BBD0)) // 薄いピンク色
+            )
+        )
+    }
+
     // タスク名の入力値
     var task_in by remember { mutableStateOf("") }
 
@@ -54,7 +108,9 @@ fun Create_Screen(navController: NavController) {
 
         // 戻るボタン
         IconButton(
-            onClick = { navController.popBackStack() },
+            onClick = { // 前の画面に遷移
+                navController.popBackStack()
+                      },
             modifier = Modifier
                 .padding(start = 8.dp, top = 8.dp)
         ) {
@@ -138,7 +194,21 @@ fun Create_Screen(navController: NavController) {
 
             // 作成ボタン
             Button(
-                onClick = { /* 作成処理 */ },
+                onClick = {     // タスクの作成処理
+                    val newTask = Task(
+                        id = tasks.size.toString(),
+                        title = task_in,
+                        date = date_in,
+                        time = "$starttime_in〜$endtime_in",
+                        tag = 0 // 仮
+                    )
+
+                    // タスクの追加
+                    tasks = tasks + newTask
+
+                    // 前の画面に遷移
+                    navController.popBackStack()
+                },
                 modifier = Modifier
                     .padding(top = 40.dp)
                     .align(Alignment.End),      // 右端に配置
