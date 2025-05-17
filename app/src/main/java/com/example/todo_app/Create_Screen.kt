@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
-// 作成,編集画面
+// 作成画面
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Create_Screen(navController: NavController) {

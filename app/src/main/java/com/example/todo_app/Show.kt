@@ -32,14 +32,16 @@ fun ShowTasks(
     tags: List<Tag>,        // タグリスト
     selectedTasks: List<String>,        // 選択されているタスクのIDリスト
     isTagSelectionActive: Boolean,      // 選択モード(タグ)か判定
-    onTaskToggle: (String) -> Unit      // 選択モードの切り替え用
+    onTaskToggle: (String) -> Unit,      // 選択モードの切り替え用
+    nav: NavController
 ) {
     // 今日のタスク一覧を表示
     tasks.forEach { task ->
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp),
+                .padding(vertical = 4.dp)
+                .clickable{ nav.navigate("Create_Screen") },  // クリック時の遷移先
             verticalAlignment = Alignment.Top       // 上に配置
         ) {
             // チェックボックス（タグ選択時は無効化）

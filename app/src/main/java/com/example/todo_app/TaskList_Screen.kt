@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
-// ホーム画面
+// タスク一覧画面
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskList_Screen(navController: NavController) {
@@ -156,7 +156,8 @@ fun TaskList_Screen(navController: NavController) {
                                 } else {
                                     selectedTasks + taskId
                                 }
-                            }
+                            },
+                            nav = navController
                         )
                     }
                 }

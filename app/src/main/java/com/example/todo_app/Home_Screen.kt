@@ -185,7 +185,8 @@ fun Home_Screen(navController: NavController){
                         } else {
                             selectedTasks + taskId
                         }
-                    }
+                    },
+                    nav = navController
                 )
 
 
