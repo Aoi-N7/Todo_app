@@ -28,11 +28,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewmodel.compose.viewModel
+
 
 // ホーム画面
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home_Screen(navController: NavController){
+fun Home_Screen(navController: NavController, viewModel: TaskViewModel = viewModel()){
     // 選択されたタスクのIDリスト
     var selectedTasks by remember { mutableStateOf(listOf<String>()) }
 
@@ -53,38 +55,9 @@ fun Home_Screen(navController: NavController){
     val isTaskSelectionActive = selectedTasks.isNotEmpty()
     val isTagSelectionActive = selectedTags.isNotEmpty()
 
-    // 仮タスク
-    var tasks by remember {
-        mutableStateOf(
-            listOf(
-                Task(
-                    id = "0",
-                    title = "タスク名",
-                    date = "1月1日",
-                    time = "10:21",
-                    tag = 1
-                ),
-                Task(
-                    id = "1",
-                    title = "誕生日プレゼント決め",
-                    date = "4月1日",
-                    time = "12:00",
-                    tag = 2
-                )
-            )
-        )
-    }
-
-    // 仮タグ
-    var tags by remember {
-        mutableStateOf(
-            listOf(
-                Tag(id = "0", name = "仕事", color = Color(0xFFE3F2FD)), // 薄い青色
-                Tag(id = "1", name = "プライベート", color = Color(0xFFE8F5E9)), // 薄い緑色
-                Tag(id = "2", name = "自治会", color = Color(0xFFF8BBD0)) // 薄いピンク色
-            )
-        )
-    }
+    // タスク情報とタグ情報の読み込み
+    val tasks by viewModel.tasks
+    val tags by viewModel.tags
 
     // メイン画面のレイアウト
     Column(
