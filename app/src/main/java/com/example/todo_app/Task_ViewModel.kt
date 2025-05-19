@@ -34,7 +34,7 @@ class TaskViewModel : ViewModel() {
     val tags: State<List<Tag>> get() = _tags
 
     // タスク追加
-    fun addTask(task: Task) {
+    fun addTask(context: Context, task: Task) {
         _tasks.value = _tasks.value + task
     }
 

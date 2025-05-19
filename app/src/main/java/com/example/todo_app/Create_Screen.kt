@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -48,6 +49,9 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
 
     // 終了時刻の入力値
     var endtime_in by remember { mutableStateOf("") }
+
+    // 現在のコンテキストを取得
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -155,7 +159,7 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
                     )
 
                     // タスクの追加
-                    viewModel.addTask(newTask)
+                    viewModel.addTask(context, newTask)
                     Log.d("AddTask", "AddTask: $newTask")
                     Log.d("NowTask", "NowTask: $tasks")
 
