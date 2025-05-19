@@ -20,6 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 //import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 // 画面遷移先
 enum class Screen {
@@ -34,6 +35,9 @@ fun NavRoute(){
     // NavControllerを定義
     val navController = rememberNavController()
 
+    // ViewModelを定義
+    val taskViewModel: TaskViewModel = viewModel()
+
     //NavHostの作成,設定
     NavHost(navController = navController,
         // 最初に表示するページ
@@ -41,17 +45,17 @@ fun NavRoute(){
     ) {
         // ルート名：Home_Screen　ホーム画面に遷移
         composable(route = Screen.Home_Screen.name) {
-            Home_Screen(navController = navController)
+            Home_Screen(navController, taskViewModel)
         }
 
         // ルート名：Create_Screen　作成画面に遷移
         composable(route = Screen.Create_Screen.name) {
-            Create_Screen(navController = navController)
+            Create_Screen(navController, taskViewModel)
         }
 
         // ルート名：TaskList_Screen　タスク一覧画面に遷移
         composable(route = Screen.TaskList_Screen.name) {
-            TaskList_Screen(navController = navController)
+            TaskList_Screen(navController, taskViewModel)
         }
 
     }

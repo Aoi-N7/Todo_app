@@ -5,6 +5,7 @@
 
 package com.example.todo_app
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.compose.foundation.background
@@ -155,6 +156,8 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
 
                     // タスクの追加
                     viewModel.addTask(newTask)
+                    Log.d("AddTask", "AddTask: $newTask")
+                    Log.d("NowTask", "NowTask: $tasks")
 
                     // 前の画面に遷移
                     navController.popBackStack()

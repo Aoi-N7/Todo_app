@@ -5,6 +5,7 @@
 
 package com.example.todo_app
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.compose.foundation.background
@@ -58,6 +59,8 @@ fun Home_Screen(navController: NavController, viewModel: TaskViewModel = viewMod
     // タスク情報とタグ情報の読み込み
     val tasks by viewModel.tasks
     val tags by viewModel.tags
+
+    Log.d("NowTask", "NowTask: $tasks")
 
     // メイン画面のレイアウト
     Column(

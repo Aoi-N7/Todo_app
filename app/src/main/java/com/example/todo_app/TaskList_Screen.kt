@@ -25,12 +25,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 // タスク一覧画面
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskList_Screen(navController: NavController) {
+fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel) {
+    // タスク情報とタグ情報の読み込み
+    val tasks by viewModel.tasks
+    val tags by viewModel.tags
+
     // 選択されたタスクのIDリスト
     var selectedTasks by remember { mutableStateOf(listOf<String>()) }
 
@@ -41,60 +46,6 @@ fun TaskList_Screen(navController: NavController) {
     val isSelectionActive = selectedTasks.isNotEmpty() || selectedTags.isNotEmpty()
     val isTaskSelectionActive = selectedTasks.isNotEmpty()
     val isTagSelectionActive = selectedTags.isNotEmpty()
-
-    // 仮タスク
-    var tasks by remember {
-        mutableStateOf(
-            listOf(
-                Task(
-                    id = "0",
-                    title = "タスク名",
-                    date = "1月1日",
-                    time = "10:21",
-                    tag = 1
-                ),
-                Task(
-                    id = "1",
-                    title = "誕生日プレゼント決め",
-                    date = "4月1日",
-                    time = "12:00",
-                    tag = 2
-                ),
-                Task(
-                    id = "2",
-                    title = "食事",
-                    date = "4月1日",
-                    time = "12:00",
-                    tag = 2
-                ),
-                Task(
-                    id = "3",
-                    title = "買い物",
-                    date = "4月1日",
-                    time = "12:00",
-                    tag = 2
-                ),
-                Task(
-                    id = "4",
-                    title = "旅行",
-                    date = "4月1日",
-                    time = "12:00",
-                    tag = 2
-                )
-            )
-        )
-    }
-
-    // 仮タグ
-    var tags by remember {
-        mutableStateOf(
-            listOf(
-                Tag(id = "0", name = "仕事", color = Color(0xFFE3F2FD)), // 薄い青色
-                Tag(id = "1", name = "プライベート", color = Color(0xFFE8F5E9)), // 薄い緑色
-                Tag(id = "2", name = "自治会", color = Color(0xFFF8BBD0)) // 薄いピンク色
-            )
-        )
-    }
 
     // 画面レイアウト
     Box(
