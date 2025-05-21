@@ -73,7 +73,7 @@ fun SaveFile(context: Context, tags: List<Tag>, allTasks: List<Task>) {
         val tagsFile = File(dir, "tags.txt")
         tagsFile.printWriter().use { out ->
             tags.forEach {
-                out.println("${it.id},${it.name}")
+                out.println("${it.id},${it.name},${it.color.value.toString(16)}")
             }
         }
         Log.d(TAG, "tags.txt を上書き保存しました（${tags.size} 件）")
@@ -122,10 +122,14 @@ fun LoadFiles(context: Context): Pair<List<Tag>, List<Task>> {
             tagsFile.forEachLine { line ->
                 val parts = line.split(",") // 1行をカンマで分割（形式: id,name）
                 if (parts.size >= 2) {
-                    val id = parts[0]
-                    val name = parts[1]
-                    // 色は保存していないため仮の色を設定（必要に応じて拡張可能）
-                    tags.add(Tag(id = id, name = name, color = Color.LightGray))
+                    val id = parts[0]   // ID
+                    val name = parts[1]     // タグ名
+                    // カラー情報
+                    val colorHex = parts[2]
+                    val color = Color(colorHex.toULong(16))
+
+                    // タグリストへの追加
+                    tags.add(Tag(id = id, name = name, color = color))
                 }
             }
             Log.d(TAG, "tags.txt を読み込みました（${tags.size} 件）")
@@ -142,12 +146,14 @@ fun LoadFiles(context: Context): Pair<List<Tag>, List<Task>> {
                     val parts = line.split(",") // 1行をカンマで分割
                     if (parts.size >= 5) {
                         val task = Task(
-                            id = parts[0],
-                            title = parts[1],
-                            date = parts[2],
-                            time = parts[3],
-                            tag = parts[4].toInt() // Int 型に変換
+                            id = parts[0],  // ID
+                            title = parts[1],   // タイトル
+                            date = parts[2],    // 日付
+                            time = parts[3],    // 時刻
+                            tag = parts[4].toInt() // タグID(Int 型に変換)
                         )
+
+                        // タスクリストへの追加
                         tasks.add(task)
                     }
                 }
