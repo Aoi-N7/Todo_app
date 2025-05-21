@@ -34,6 +34,13 @@ class TaskViewModel : ViewModel() {
     )
     val tags: State<List<Tag>> get() = _tags
 
+    // データの更新(ファイルから読み込み)
+    fun loadFromStorage(context: Context) {
+        val (loadedTags, loadedTasks) = LoadFiles(context)
+        _tags.value = loadedTags
+        _tasks.value = loadedTasks
+    }
+
     // タスク追加
     fun addTask(context: Context, task: Task) {
         // リストへの追加
@@ -94,6 +101,70 @@ fun SaveFile(context: Context, tags: List<Tag>, allTasks: List<Task>) {
         // 例外が発生した場合のエラーログ
         Log.e(TAG, "ファイル保存中にエラーが発生しました: ${e.message}")
     }
+}
+
+// 保存されたファイルからタスク情報とタグ情報のリストを読み込む関数
+fun LoadFiles(context: Context): Pair<List<Tag>, List<Task>> {
+    // ログ用のタグ名
+    val TAG = "LoaTask"
+
+    // 読み込み先のディレクトリ
+    val dir = File(context.filesDir, "Todo_app_tasks")
+
+    // 読み込んだ情報をタスクとタグごとに格納するリスト
+    val tags = mutableListOf<Tag>()
+    val tasks = mutableListOf<Task>()
+
+    try {
+        // タグ一覧ファイル "tags.txt" を読み込む
+        val tagsFile = File(dir, "tags.txt")
+        if (tagsFile.exists()) {
+            tagsFile.forEachLine { line ->
+                val parts = line.split(",") // 1行をカンマで分割（形式: id,name）
+                if (parts.size >= 2) {
+                    val id = parts[0]
+                    val name = parts[1]
+                    // 色は保存していないため仮の色を設定（必要に応じて拡張可能）
+                    tags.add(Tag(id = id, name = name, color = Color.LightGray))
+                }
+            }
+            Log.d(TAG, "tags.txt を読み込みました（${tags.size} 件）")
+        } else {
+            Log.w(TAG, "tags.txt が存在しません")
+        }
+
+        // 2. 各タグに対応するタスクファイル "tag_{id}.txt" を読み込む
+        tags.forEach { tag ->
+            val tagFile = File(dir, "tag_${tag.id}.txt")
+            if (tagFile.exists()) {
+                // タグファイルが存在する場合
+                tagFile.forEachLine { line ->
+                    val parts = line.split(",") // 1行をカンマで分割
+                    if (parts.size >= 5) {
+                        val task = Task(
+                            id = parts[0],
+                            title = parts[1],
+                            date = parts[2],
+                            time = parts[3],
+                            tag = parts[4].toInt() // Int 型に変換
+                        )
+                        tasks.add(task)
+                    }
+                }
+                Log.d(TAG, "tag_${tag.id}.txt を読み込みました（${tasks.count { it.tag.toString() == tag.id }} 件）")
+            } else {
+                // タグファイルが存在しない場合
+                Log.w(TAG, "tag_${tag.id}.txt が存在しません")
+            }
+        }
+
+    } catch (e: Exception) {
+        // 例外が発生した場合はエラーログを出力
+        Log.e(TAG, "ファイル読み込み中にエラーが発生しました: ${e.message}")
+    }
+
+    // 読み込んだタグとタスクのリストを返す
+    return Pair(tags, tasks)
 }
 
 

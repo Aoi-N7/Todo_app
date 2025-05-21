@@ -163,6 +163,9 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
                     Log.d("AddTask", "AddTask: $newTask")
                     Log.d("NowTask", "NowTask: $tasks")
 
+                    // 更新
+                    viewModel.loadFromStorage(context)
+
                     // 前の画面に遷移
                     navController.popBackStack()
                 },
