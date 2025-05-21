@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.compose.ui.graphics.Color
 import java.io.File
+import android.util.Log
 
 // アプリ全体で共有したいリストをViewModelを使って管理
 class TaskViewModel : ViewModel() {
@@ -35,7 +36,11 @@ class TaskViewModel : ViewModel() {
 
     // タスク追加
     fun addTask(context: Context, task: Task) {
+        // リストへの追加
         _tasks.value = _tasks.value + task
+
+        // ファイルの更新
+        SaveFile(context, _tags.value, _tasks.value)
     }
 
     // タグ追加
@@ -44,38 +49,53 @@ class TaskViewModel : ViewModel() {
     }
 }
 
-// テキストファイルへの保存関数
-fun SaveFile(context: Context, task: Task, tags: List<Tag>, allTasks: List<Task>) {
-    // 対象のタグを取得（task.tag は Int、tag.id は String なので比較のために変換）
-    val tag = tags.find { it.id == task.tag.toString() } ?: return
+// タスク情報やタグ情報の保存(内部ストレージにテキストファイル形式で)
+fun SaveFile(context: Context, tags: List<Tag>, allTasks: List<Task>) {
+    // ログ用のタグ名
+    val TAG = "SaveTask"
 
-    // 1. 内部ストレージの "tasks" ディレクトリを取得・作成
-    val dir = File(context.filesDir, "tasks")
-    if (!dir.exists()) {
-        // ディレクトリが存在しない場合は作成
-        dir.mkdirs()
-    }
+    try {
+        // 内部ストレージに "Todo_app_tasks" ディレクトリを作成（ない場合）
+        val dir = File(context.filesDir, "Todo_app_tasks")
+        if (!dir.exists()) {
+            val created = dir.mkdirs()
+            Log.d(TAG, if (created) "tasks ディレクトリを作成しました" else "tasks ディレクトリの作成に失敗しました")
+        }
 
-    // 2. "tags.txt" ファイルを作成（存在しない場合のみ）
-    val tagsFile = File(dir, "tags.txt")
-    if (!tagsFile.exists()) {
+        // "tags.txt"を上書き保存（タグ一覧を常に最新に保つ）
+        val tagsFile = File(dir, "tags.txt")
         tagsFile.printWriter().use { out ->
-            // 各タグの ID と名前を 1 行ずつ書き込む（例: 0,仕事）
             tags.forEach {
                 out.println("${it.id},${it.name}")
             }
         }
-    }
+        Log.d(TAG, "tags.txt を上書き保存しました（${tags.size} 件）")
 
-    // 3. 同じタグ ID を持つタスクをすべて取得
-    val tasksWithSameTag = allTasks.filter { it.tag.toString() == tag.id }
+        // 各タグごとに対応するタスクを取り出し、個別ファイルに保存("tag_0.txt"的な)
+        tags.forEach { tag ->
+            // タグIDが一致するタスクの取り出し
+            val tasksWithSameTag = allTasks.filter { it.tag.toString() == tag.id }
 
-    // 4. "tag_{id}.txt" ファイルにタスクを上書き保存
-    val tagFile = File(dir, "tag_${tag.id}.txt")
-    tagFile.printWriter().use { out ->
-        // 各タスクを 1 行ずつ CSV 形式で書き込む（例: 1,買い物,4月1日,12:00,2）
-        tasksWithSameTag.forEach {
-            out.println("${it.id},${it.title},${it.date},${it.time},${it.tag}")
+            // タグIDに対応するファイル名を作成("tag_1.txt"的な)
+            val tagFile = File(dir, "tag_${tag.id}.txt")
+
+            // 該当タスクをファイルに上書き保存(CSV形式)
+            tagFile.printWriter().use { out ->
+                tasksWithSameTag.forEach {
+                    out.println("${it.id},${it.title},${it.date},${it.time},${it.tag}")
+                }
+            }
+
+            // 保存完了ログ
+            Log.d(TAG, "tag_${tag.id}.txt にタスクを保存しました（${tasksWithSameTag.size} 件）")
         }
+
+    } catch (e: Exception) {
+        // 例外が発生した場合のエラーログ
+        Log.e(TAG, "ファイル保存中にエラーが発生しました: ${e.message}")
     }
 }
+
+
+
+
