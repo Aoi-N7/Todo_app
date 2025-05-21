@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -46,6 +47,12 @@ fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel) {
     val isSelectionActive = selectedTasks.isNotEmpty() || selectedTags.isNotEmpty()
     val isTaskSelectionActive = selectedTasks.isNotEmpty()
     val isTagSelectionActive = selectedTags.isNotEmpty()
+
+    // 現在のコンテキストを取得
+    val context = LocalContext.current
+
+    // 更新
+    viewModel.loadFromStorage(context)
 
     // 画面レイアウト
     Box(

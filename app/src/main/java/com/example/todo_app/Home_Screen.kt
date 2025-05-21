@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -61,6 +62,12 @@ fun Home_Screen(navController: NavController, viewModel: TaskViewModel = viewMod
     val tags by viewModel.tags
 
     Log.d("NowTask", "NowTask: $tasks")
+
+    // 現在のコンテキストを取得
+    val context = LocalContext.current
+
+    // 更新
+    viewModel.loadFromStorage(context)
 
     // メイン画面のレイアウト
     Column(

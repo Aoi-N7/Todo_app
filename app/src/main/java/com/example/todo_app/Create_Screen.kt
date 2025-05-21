@@ -53,6 +53,9 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
     // 現在のコンテキストを取得
     val context = LocalContext.current
 
+    // 更新
+    viewModel.loadFromStorage(context)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -162,9 +165,6 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
                     viewModel.addTask(context, newTask)
                     Log.d("AddTask", "AddTask: $newTask")
                     Log.d("NowTask", "NowTask: $tasks")
-
-                    // 更新
-                    viewModel.loadFromStorage(context)
 
                     // 前の画面に遷移
                     navController.popBackStack()
