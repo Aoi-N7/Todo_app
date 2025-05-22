@@ -18,8 +18,7 @@ class TaskViewModel : ViewModel() {
     // タスク情報
     private val _tasks = mutableStateOf(
         listOf(
-            Task(id = 0, title = "タスク名", date = "1月1日", time = "10:21", tag = 1),
-            Task(id = 1, title = "誕生日プレゼント決め", date = "4月1日", time = "12:00", tag = 2)
+            Task(id = 0, title = "タスク名", date = "1月1日", time = "00:00", tag = 0, state = false),
         )
     )
     val tasks: State<List<Task>> get() = _tasks
@@ -104,7 +103,7 @@ fun SaveFile(context: Context, tags: List<Tag>, allTasks: List<Task>) {
             // 該当タスクをファイルに上書き保存(CSV形式)
             tagFile.printWriter().use { out ->
                 tasksWithSameTag.forEach {
-                    out.println("${it.id},${it.title},${it.date},${it.time},${it.tag}")
+                    out.println("${it.id},${it.title},${it.date},${it.time},${it.tag},${it.state}")
                 }
             }
 
@@ -165,7 +164,8 @@ fun LoadFiles(context: Context): Pair<List<Tag>, List<Task>> {
                             title = parts[1],   // タイトル
                             date = parts[2],    // 日付
                             time = parts[3],    // 時刻
-                            tag = parts[4].toInt() // タグID(Int 型に変換)
+                            tag = parts[4].toInt(), // タグID(Int 型に変換)
+                            state = parts[5].toBoolean()    // タスクの状態
                         )
 
                         // タスクリストへの追加

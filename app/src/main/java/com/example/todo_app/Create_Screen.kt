@@ -178,7 +178,9 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
                         title = task_in,
                         date = date_in,
                         time = "$starttime_in〜$endtime_in",
-                        tag = 0
+                        tag = 0,
+                        state = false
+
                     )
 
                     // タスクの追加

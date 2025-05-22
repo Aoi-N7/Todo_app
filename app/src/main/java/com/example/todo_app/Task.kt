@@ -11,5 +11,6 @@ data class Task(
     val title: String,      // タイトル
     val date: String,       // 日付
     val time: String,       // 時刻
-    val tag: Int     // タグ
+    val tag: Int,     // タグ
+    val state: Boolean      // タスクの状態(true:完了、false:未完了)
 )
