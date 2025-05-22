@@ -242,17 +242,20 @@ fun Home_Screen(navController: NavController, viewModel: TaskViewModel = viewMod
             selectedTasks = selectedTasks,
             selectedTags = selectedTags,
             onDelete = {
-                if (selectedTasks.isNotEmpty()) {
+                //タスクやタグの削除処理
+                viewModel.deleteItems(context, selectedTasks, selectedTags)
 
-                    selectedTasks = emptyList()
-                }
-                if (selectedTags.isNotEmpty()) {
-                    selectedTags = emptyList()
-                }
+                // 選択中のタスクやタグのリセット
+                selectedTasks = emptyList()
+                selectedTags = emptyList()
             },
             onComplete = {
                 if (selectedTasks.isNotEmpty()) {
+                    //タスクやタグの完了処理の配置予定場所
+
+                    // 選択中のタスクやタグのリセット
                     selectedTasks = emptyList()
+                    selectedTags = emptyList()
                 }
             }
         )

@@ -128,17 +128,20 @@ fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel) {
             selectedTasks = selectedTasks,
             selectedTags = selectedTags,
             onDelete = {
-                // タスクの削除処理
-                if (selectedTasks.isNotEmpty()) {
-                    // 関数配置の予定場所
-                    selectedTasks = emptyList()
-                }
+                //タスクやタグの削除処理
+                viewModel.deleteItems(context, selectedTasks, selectedTags)
+
+                // 選択中のタスクやタグのリセット
+                selectedTasks = emptyList()
+                selectedTags = emptyList()
             },
             onComplete = {
-                // タスクの完了処理
                 if (selectedTasks.isNotEmpty()) {
-                    // 関数配置の予定場所
+                    //タスクやタグの完了処理の配置予定場所
+
+                    // 選択中のタスクやタグのリセット
                     selectedTasks = emptyList()
+                    selectedTags = emptyList()
                 }
             }
         )

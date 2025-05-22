@@ -54,6 +54,18 @@ class TaskViewModel : ViewModel() {
     fun addTag(tag: Tag) {
         _tags.value = _tags.value + tag
     }
+
+    fun deleteItems(context: Context, taskIds: List<String>, tagIds: List<String>) {
+        // タスクの削除(選択されていないタスクだけを残す)
+        _tasks.value = _tasks.value.filterNot { it.id in taskIds }
+
+        // タグの削除(選択されていないタグだけを残す)
+        _tags.value = _tags.value.filterNot { it.id in tagIds }
+
+        // ファイルを更新（削除後の状態で保存）
+        SaveFile(context, _tags.value, _tasks.value)
+    }
+
 }
 
 // タスク情報やタグ情報の保存(内部ストレージにテキストファイル形式で)
