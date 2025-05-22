@@ -50,10 +50,20 @@ fun NavRoute(){
             Home_Screen(navController, taskViewModel)
         }
 
-        // ルート名：Create_Screen　作成画面に遷移
-        composable(route = Screen.Create_Screen.name) {
+        // ルート名：Create_Screen　作成画面に遷移(引数なし)
+        composable("Create_Screen") {
             Create_Screen(navController, taskViewModel)
         }
+
+        // ルート名：Create_Screen　作成画面に遷移(引数あり)
+        composable(
+            route = "Create_Screen/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id")
+            Create_Screen(navController, taskViewModel, id)
+        }
+
 
         // ルート名：TaskList_Screen　タスク一覧画面に遷移
         composable(

@@ -27,28 +27,39 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
-// 作成画面
+// 作成画面・編集画面
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewModel()) {
+fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewModel(), id: Int? = null) {
     // タスク情報とタグ情報の読み込み
     val tasks by viewModel.tasks
     val tags by viewModel.tags
 
+    // タスクidからタスク情報を抜き取る
+    val Edit_task = tasks.find { it.id == id }
+
     // タスク名の入力値
-    var task_in by remember { mutableStateOf("") }
+    var task_in by remember { mutableStateOf(Edit_task?.title ?: "") }
 
     // タグの入力値
-    var tag_in by remember { mutableStateOf("") }
+    var tag_in by remember { mutableStateOf(Edit_task?.tag ?: "") }
 
     // 日付の入力値
-    var date_in by remember { mutableStateOf("") }
+    var date_in by remember { mutableStateOf(Edit_task?.date ?: "") }
 
-    // 開始時刻の入力値
-    var starttime_in by remember { mutableStateOf("") }
+    // 開始と終了時刻の入力値
+    val timeParts = Edit_task?.time?.split("〜") ?: listOf("", "")
+    var starttime_in by remember { mutableStateOf(timeParts.getOrNull(0) ?: "")}
+    var endtime_in by remember { mutableStateOf(timeParts.getOrNull(1) ?: "") }
 
-    // 終了時刻の入力値
-    var endtime_in by remember { mutableStateOf("") }
+    // 選択されたタスクのIDリスト
+    var selectedTasks by remember { mutableStateOf(listOf<Int>()) }
+
+    // 選択されたタグのIDリスト
+    var selectedTags by remember { mutableStateOf(listOf<Int>()) }
+
+    // 使用中のIDリスト
+    val usedIds = tasks.map { it.id }.toSet()
 
     // 現在のコンテキストを取得
     val context = LocalContext.current
@@ -94,7 +105,7 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
             // タグ名
             InputField(
                 section = "タグ",
-                value = tag_in,
+                value = tag_in.toString(),
                 onValueChange = { tag_in = it }
             )
 
@@ -152,13 +163,22 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
 
             // 作成ボタン
             Button(
-                onClick = {     // タスクの作成処理
+                onClick = {
+                    // 現在のタスクを削除
+                    if(id != null){
+                        selectedTasks = listOf(id)
+
+                        //タスクやタグの削除処理
+                        viewModel.deleteItems(context, selectedTasks, selectedTags)
+                    }
+
+                    // タスクの作成処理
                     val newTask = Task(
-                        id = tasks.size.toInt(),
+                        id = generateSequence(0) { it + 1 }.first { it !in usedIds },    // 未使用かつ最小のIDを使用
                         title = task_in,
                         date = date_in,
                         time = "$starttime_in〜$endtime_in",
-                        tag = 0 // 仮
+                        tag = 0
                     )
 
                     // タスクの追加
@@ -178,7 +198,7 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
             ) {
                 // ボタンの表示文字
                 Text(
-                    text = "作成",
+                    text = if (id != null) "変更" else "作成",  // idがある場合は"変更"、idがない場合は"作成"
                     fontSize = 18.sp,
                     color = Color.White,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
