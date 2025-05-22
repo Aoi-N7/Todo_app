@@ -21,6 +21,8 @@ import androidx.navigation.compose.composable
 //import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 
 // 画面遷移先
 enum class Screen {
@@ -54,9 +56,14 @@ fun NavRoute(){
         }
 
         // ルート名：TaskList_Screen　タスク一覧画面に遷移
-        composable(route = Screen.TaskList_Screen.name) {
-            TaskList_Screen(navController, taskViewModel)
+        composable(
+            route = "TaskList_Screen/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id")
+            TaskList_Screen(navController, taskViewModel, id)
         }
+
 
     }
 }

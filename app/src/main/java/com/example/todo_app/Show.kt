@@ -131,7 +131,7 @@ fun ShowTags(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp)
-                .clickable{ nav.navigate("TaskList_Screen") },  // クリック時の遷移先
+                .clickable{ nav.navigate("TaskList_Screen/${tag.id}") },  // クリック時の遷移先
             verticalAlignment = Alignment.Top       // 上に配置
         ) {
             // チェックボックス（タグ選択時は無効化）

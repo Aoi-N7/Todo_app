@@ -32,7 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 // タスク一覧画面
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel) {
+fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel, id: String? = null) {
     // タスク情報とタグ情報の読み込み
     val tasks by viewModel.tasks
     val tags by viewModel.tags
