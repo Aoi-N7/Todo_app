@@ -255,6 +255,9 @@ fun TagDialog(context: Context, viewModel: TaskViewModel, tagDialogOpen: Boolean
     // 選択された色を保持する変数
     var selectedColor by remember { mutableStateOf<String?>(null) }
 
+    // 全ての欄が入力されているか判定
+    val isFormValid = title.isNotBlank() && selectedColor != null
+
     // 色の選択肢リスト
     val colorOptions = listOf("赤", "黄", "青", "オレンジ", "緑", "紫", "ピンク")
 
@@ -351,6 +354,7 @@ fun TagDialog(context: Context, viewModel: TaskViewModel, tagDialogOpen: Boolean
                                 // ダイアログを閉じる
                                 onDismiss()
                             },
+                            enabled = isFormValid,   // タグ名と色が選択されているときのみ有効に設定
                             modifier = Modifier.align(Alignment.End)
                         ) {
                             Text(text = "作成")
