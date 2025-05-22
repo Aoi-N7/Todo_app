@@ -121,6 +121,27 @@ fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel) {
                 }
             }
         }
+
+        // アクションボタン（選択時のみ表示）
+        ActionButtons(
+            isSelectionActive = isSelectionActive,
+            selectedTasks = selectedTasks,
+            selectedTags = selectedTags,
+            onDelete = {
+                // タスクの削除処理
+                if (selectedTasks.isNotEmpty()) {
+                    // 関数配置の予定場所
+                    selectedTasks = emptyList()
+                }
+            },
+            onComplete = {
+                // タスクの完了処理
+                if (selectedTasks.isNotEmpty()) {
+                    // 関数配置の予定場所
+                    selectedTasks = emptyList()
+                }
+            }
+        )
     }
 
 }

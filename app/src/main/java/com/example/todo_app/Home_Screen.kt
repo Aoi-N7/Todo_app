@@ -236,6 +236,25 @@ fun Home_Screen(navController: NavController, viewModel: TaskViewModel = viewMod
             }
         }
 
-        // アクションボタン（選択時のみ表示）UI作成後に取り組み予定
+        // アクションボタン（選択時のみ表示）
+        ActionButtons(
+            isSelectionActive = isSelectionActive,
+            selectedTasks = selectedTasks,
+            selectedTags = selectedTags,
+            onDelete = {
+                if (selectedTasks.isNotEmpty()) {
+
+                    selectedTasks = emptyList()
+                }
+                if (selectedTags.isNotEmpty()) {
+                    selectedTags = emptyList()
+                }
+            },
+            onComplete = {
+                if (selectedTasks.isNotEmpty()) {
+                    selectedTasks = emptyList()
+                }
+            }
+        )
     }
 }

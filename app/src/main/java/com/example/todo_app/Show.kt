@@ -6,6 +6,7 @@
 package com.example.todo_app
 
 import androidx.compose.runtime.Composable
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
@@ -174,6 +175,59 @@ fun ShowTags(
                     Text(
                         text = tag.name,
                         fontWeight = FontWeight.Medium
+                    )
+                }
+            }
+        }
+    }
+}
+
+//完了削除の選択バー
+@Composable
+fun ActionButtons(
+    isSelectionActive: Boolean,  // 選択モードか判定
+    selectedTasks: List<String>,  // 選択中のタスクリスト
+    selectedTags: List<String>,  // 選択中のタグリスト
+    onDelete: () -> Unit,  // 削除処理
+    onComplete: () -> Unit  // 完了処理
+) {
+    // タスクかタグを選択中のみ表示
+    AnimatedVisibility(visible = isSelectionActive) {
+        // 枠の配置
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = Color(0xFFE0E0E0) // 灰色
+        ) {
+            // ボタンの配置
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                // 削除ボタン
+                Button(
+                    onClick = onDelete,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFFFCDD2) // 薄い赤色
+                    )
+                ) {
+                    Text(
+                        text = "削除",
+                        color = Color(0xFFB71C1C) // 濃い赤色
+                    )
+                }
+
+                // 完了ボタン(未完了への変更も可能にする予定)
+                Button(
+                    onClick = onComplete,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFFFF9C4) // 薄い黄色
+                    )
+                ) {
+                    Text(
+                        text = "完了",
+                        color = Color(0xFFF57F17) // 濃い黄色
                     )
                 }
             }
