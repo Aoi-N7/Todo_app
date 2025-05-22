@@ -18,8 +18,8 @@ class TaskViewModel : ViewModel() {
     // タスク情報
     private val _tasks = mutableStateOf(
         listOf(
-            Task(id = "0", title = "タスク名", date = "1月1日", time = "10:21", tag = 1),
-            Task(id = "1", title = "誕生日プレゼント決め", date = "4月1日", time = "12:00", tag = 2)
+            Task(id = 0, title = "タスク名", date = "1月1日", time = "10:21", tag = 1),
+            Task(id = 1, title = "誕生日プレゼント決め", date = "4月1日", time = "12:00", tag = 2)
         )
     )
     val tasks: State<List<Task>> get() = _tasks
@@ -27,8 +27,8 @@ class TaskViewModel : ViewModel() {
     // タグ情報
     private val _tags = mutableStateOf(
         listOf(
-            Tag(id = "0", name = "仕事", color = Color(0xFFE3F2FD)),      // 少し薄めの色
-            Tag(id = "1", name = "プライベート", color = Color(0xFFE8F5E9))      // 少し薄めの色
+            Tag(id = 0, name = "仕事", color = Color(0xFFE3F2FD)),      // 少し薄めの色
+            Tag(id = 1, name = "プライベート", color = Color(0xFFE8F5E9))      // 少し薄めの色
         )
     )
     val tags: State<List<Tag>> get() = _tags
@@ -58,7 +58,7 @@ class TaskViewModel : ViewModel() {
         SaveFile(context, _tags.value, _tasks.value)
     }
 
-    fun deleteItems(context: Context, taskIds: List<String>, tagIds: List<String>) {
+    fun deleteItems(context: Context, taskIds: List<Int>, tagIds: List<Int>) {
         // タスクの削除(選択されていないタスクだけを残す)
         _tasks.value = _tasks.value.filterNot { it.id in taskIds }
 
@@ -96,7 +96,7 @@ fun SaveFile(context: Context, tags: List<Tag>, allTasks: List<Task>) {
         // 各タグごとに対応するタスクを取り出し、個別ファイルに保存("tag_0.txt"的な)
         tags.forEach { tag ->
             // タグIDが一致するタスクの取り出し
-            val tasksWithSameTag = allTasks.filter { it.tag.toString() == tag.id }
+            val tasksWithSameTag = allTasks.filter { it.tag == tag.id }
 
             // タグIDに対応するファイル名を作成("tag_1.txt"的な)
             val tagFile = File(dir, "tag_${tag.id}.txt")
@@ -137,7 +137,7 @@ fun LoadFiles(context: Context): Pair<List<Tag>, List<Task>> {
             tagsFile.forEachLine { line ->
                 val parts = line.split(",") // 1行をカンマで分割（形式: id,name）
                 if (parts.size >= 2) {
-                    val id = parts[0]   // ID
+                    val id = parts[0].toInt()   // ID
                     val name = parts[1]     // タグ名
                     // カラー情報
                     val colorHex = parts[2]
@@ -161,7 +161,7 @@ fun LoadFiles(context: Context): Pair<List<Tag>, List<Task>> {
                     val parts = line.split(",") // 1行をカンマで分割
                     if (parts.size >= 5) {
                         val task = Task(
-                            id = parts[0],  // ID
+                            id = parts[0].toInt(),  // ID
                             title = parts[1],   // タイトル
                             date = parts[2],    // 日付
                             time = parts[3],    // 時刻
@@ -172,7 +172,7 @@ fun LoadFiles(context: Context): Pair<List<Tag>, List<Task>> {
                         tasks.add(task)
                     }
                 }
-                Log.d(TAG, "tag_${tag.id}.txt を読み込みました（${tasks.count { it.tag.toString() == tag.id }} 件）")
+                Log.d(TAG, "tag_${tag.id}.txt を読み込みました（${tasks.count { it.tag == tag.id }} 件）")
             } else {
                 // タグファイルが存在しない場合
                 Log.w(TAG, "tag_${tag.id}.txt が存在しません")

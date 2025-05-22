@@ -154,7 +154,7 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
             Button(
                 onClick = {     // タスクの作成処理
                     val newTask = Task(
-                        id = tasks.size.toString(),
+                        id = tasks.size.toInt(),
                         title = task_in,
                         date = date_in,
                         time = "$starttime_in〜$endtime_in",

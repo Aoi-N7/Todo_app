@@ -39,10 +39,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun Home_Screen(navController: NavController, viewModel: TaskViewModel = viewModel()){
     // 選択されたタスクのIDリスト
-    var selectedTasks by remember { mutableStateOf(listOf<String>()) }
+    var selectedTasks by remember { mutableStateOf(listOf<Int>()) }
 
     // 選択されたタグのIDリスト
-    var selectedTags by remember { mutableStateOf(listOf<String>()) }
+    var selectedTags by remember { mutableStateOf(listOf<Int>()) }
 
     // タスク作成ボタンのクリック判定
     var CreateTask by remember { mutableStateOf(false) }

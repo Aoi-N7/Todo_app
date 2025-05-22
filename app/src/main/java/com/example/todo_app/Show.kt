@@ -39,9 +39,9 @@ import androidx.lifecycle.ViewModel
 fun ShowTasks(
     tasks: List<Task>,      // 表示するタスクのリスト
     tags: List<Tag>,        // タグリスト
-    selectedTasks: List<String>,        // 選択されているタスクのIDリスト
+    selectedTasks: List<Int>,        // 選択されているタスクのIDリスト
     isTagSelectionActive: Boolean,      // 選択モード(タグ)か判定
-    onTaskToggle: (String) -> Unit,      // 選択モードの切り替え用
+    onTaskToggle: (Int) -> Unit,      // 選択モードの切り替え用
     nav: NavController
 ) {
     // 今日のタスク一覧を表示
@@ -120,9 +120,9 @@ fun ShowTasks(
 @Composable
 fun ShowTags(
     tags: List<Tag>, // 表示するタグのリスト
-    selectedTags: List<String>, // 選択されているタグのIDリスト
+    selectedTags: List<Int>, // 選択されているタグのIDリスト
     isTaskSelectionActive: Boolean, // 選択モード(タスク)か判定
-    onTagToggle: (String) -> Unit, // 選択モードの切り替え用
+    onTagToggle: (Int) -> Unit, // 選択モードの切り替え用
     nav: NavController
 ) {
     // タグ一覧を表示
@@ -194,8 +194,8 @@ fun ShowTags(
 @Composable
 fun ActionButtons(
     isSelectionActive: Boolean,  // 選択モードか判定
-    selectedTasks: List<String>,  // 選択中のタスクリスト
-    selectedTags: List<String>,  // 選択中のタグリスト
+    selectedTasks: List<Int>,  // 選択中のタスクリスト
+    selectedTags: List<Int>,  // 選択中のタグリスト
     onDelete: () -> Unit,  // 削除処理
     onComplete: () -> Unit  // 完了処理
 ) {
@@ -343,7 +343,7 @@ fun TagDialog(context: Context, viewModel: TaskViewModel, tagDialogOpen: Boolean
 
                                 // 新しいタグを作成
                                 val newTag = Tag(
-                                    id = tags.size.toString(),  // ID
+                                    id = tags.size.toInt(),  // ID
                                     name = title,   // タグ名
                                     color = color   // カラーコード
                                 )

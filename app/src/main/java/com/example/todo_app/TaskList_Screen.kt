@@ -32,16 +32,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 // タスク一覧画面
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel, id: String? = null) {
+fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel, id: Int? = null) {
     // タスク情報とタグ情報の読み込み
     val tasks by viewModel.tasks
     val tags by viewModel.tags
 
+    // idと一致するタスクを取得
+    val print = tasks.filter { it.tag == id }
+
     // 選択されたタスクのIDリスト
-    var selectedTasks by remember { mutableStateOf(listOf<String>()) }
+    var selectedTasks by remember { mutableStateOf(listOf<Int>()) }
 
     // 選択されたタグのIDリスト
-    var selectedTags by remember { mutableStateOf(listOf<String>()) }
+    var selectedTags by remember { mutableStateOf(listOf<Int>()) }
 
     // チェックボックスでの選択
     val isSelectionActive = selectedTasks.isNotEmpty() || selectedTags.isNotEmpty()
@@ -104,7 +107,7 @@ fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel, id: 
                     item{
                         // タスクリストの表示
                         ShowTasks(
-                            tasks = tasks,
+                            tasks = print,
                             tags = tags,
                             selectedTasks = selectedTasks,
                             isTagSelectionActive = isTagSelectionActive,

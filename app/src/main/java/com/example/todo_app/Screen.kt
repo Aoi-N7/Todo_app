@@ -58,9 +58,9 @@ fun NavRoute(){
         // ルート名：TaskList_Screen　タスク一覧画面に遷移
         composable(
             route = "TaskList_Screen/{id}",
-            arguments = listOf(navArgument("id") { type = NavType.StringType })
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
         ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getString("id")
+            val id = backStackEntry.arguments?.getInt("id")
             TaskList_Screen(navController, taskViewModel, id)
         }
 
