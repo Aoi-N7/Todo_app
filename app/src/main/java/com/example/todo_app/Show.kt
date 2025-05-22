@@ -5,6 +5,7 @@
 
 package com.example.todo_app
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -20,11 +21,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material3.*
 import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
+import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.ViewModel
 
 // タスク一覧の表示
 @Composable
@@ -234,3 +242,138 @@ fun ActionButtons(
         }
     }
 }
+
+// タグ作成ウィンドウの表示
+@Composable
+fun TagDialog(context: Context, viewModel: TaskViewModel, tagDialogOpen: Boolean, tags: List<Tag>, onDismiss: () -> Unit) {
+    // タグ名の入力状態を保持する変数
+    var title by remember { mutableStateOf("") }
+
+    // ドロップダウンメニューの展開状態を保持する変数
+    var expanded by remember { mutableStateOf(false) }
+
+    // 選択された色を保持する変数
+    var selectedColor by remember { mutableStateOf<String?>(null) }
+
+    // 色の選択肢リスト
+    val colorOptions = listOf("赤", "黄", "青", "オレンジ", "緑", "紫", "ピンク")
+
+    // 色名とカラーコードのリスト
+    val colorMap: Map<String, Color> = mapOf(
+        "赤" to Color(0xFFFFCDD2),
+        "黄" to Color(0xFFFFF9C4),
+        "青" to Color(0xFFBBDEFB),
+        "オレンジ" to Color(0xFFFFE0B2),
+        "緑" to Color(0xFFC8E6C9),
+        "紫" to Color(0xFFE1BEE7),
+        "ピンク" to Color(0xFFF8BBD0)
+    )
+
+    // ダイアログが開いている場合のみ表示
+    if (tagDialogOpen) {
+        Dialog(onDismissRequest = onDismiss) {
+            // ウィンドウの背景と角丸を設定
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                // レイアウト
+                Box {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        // タイトル
+                        Text(
+                            text = "新規タグ作成",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // タグ名の入力フィールド
+                        TextField(
+                            value = title,
+                            onValueChange = { title = it },
+                            placeholder = { Text("タグ名") } // 未入力時の表示文字
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // 色選択用のテキストフィールド(入力不可)
+                        Box {
+                            OutlinedTextField(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { expanded = true }, // クリックでドロップダウンを開く
+                                value = selectedColor ?: "", // 選択された色を表示
+                                onValueChange = {},
+                                readOnly = true,
+                                label = { Text("色") },
+                            )
+                        }
+
+                        // ドロップダウンメニュー本体
+                        DropdownMenu(
+                            expanded = expanded, // 展開状態
+                            onDismissRequest = { expanded = false } // 外側クリックで閉じる
+                        ) {
+                            // 色の選択肢をリスト表示
+                            colorOptions.forEach { color ->
+                                DropdownMenuItem(
+                                    text = { Text(text = color) }, // 表示テキスト
+                                    onClick = {
+                                        selectedColor = color // 色を選択
+                                        expanded = false // メニューを閉じる
+                                    }
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // 作成ボタン
+                        Button(
+                            onClick = {
+                                // カラーコードを取得
+                                val color = colorMap[selectedColor] ?: Color.White
+
+                                // 新しいタグを作成
+                                val newTag = Tag(
+                                    id = tags.size.toString(),  // ID
+                                    name = title,   // タグ名
+                                    color = color   // カラーコード
+                                )
+
+                                // タグを追加
+                                viewModel.addTag(context, newTag)
+
+                                // ダイアログを閉じる
+                                onDismiss()
+                            },
+                            modifier = Modifier.align(Alignment.End)
+                        ) {
+                            Text(text = "作成")
+                        }
+
+                    }
+
+                    // バツボタン
+                    IconButton(
+                        onClick = onDismiss,
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "閉じる",
+                            tint = Color.Red
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+

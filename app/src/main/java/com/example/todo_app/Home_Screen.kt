@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 
@@ -65,6 +66,9 @@ fun Home_Screen(navController: NavController, viewModel: TaskViewModel = viewMod
 
     // 現在のコンテキストを取得
     val context = LocalContext.current
+
+    // 新規タグ名
+    var NewTag by remember { mutableStateOf("") }
 
     // 更新
     viewModel.loadFromStorage(context)
@@ -259,5 +263,15 @@ fun Home_Screen(navController: NavController, viewModel: TaskViewModel = viewMod
                 }
             }
         )
+
+        // タグ作成ウィンドウの表示
+        TagDialog(
+            context = context,
+            viewModel = viewModel,
+            tagDialogOpen = tagDialogOpen,
+            tags = tags,
+            onDismiss = { tagDialogOpen = false }
+        )
+
     }
 }

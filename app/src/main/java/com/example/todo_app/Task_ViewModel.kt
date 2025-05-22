@@ -27,9 +27,8 @@ class TaskViewModel : ViewModel() {
     // タグ情報
     private val _tags = mutableStateOf(
         listOf(
-            Tag(id = "0", name = "仕事", color = Color(0xFFE3F2FD)),
-            Tag(id = "1", name = "プライベート", color = Color(0xFFE8F5E9)),
-            Tag(id = "2", name = "自治会", color = Color(0xFFF8BBD0))
+            Tag(id = "0", name = "仕事", color = Color(0xFFE3F2FD)),      // 少し薄めの色
+            Tag(id = "1", name = "プライベート", color = Color(0xFFE8F5E9))      // 少し薄めの色
         )
     )
     val tags: State<List<Tag>> get() = _tags
@@ -51,8 +50,12 @@ class TaskViewModel : ViewModel() {
     }
 
     // タグ追加
-    fun addTag(tag: Tag) {
+    fun addTag(context: Context, tag: Tag) {
+        // リストへの追加
         _tags.value = _tags.value + tag
+
+        // ファイルの更新
+        SaveFile(context, _tags.value, _tasks.value)
     }
 
     fun deleteItems(context: Context, taskIds: List<String>, tagIds: List<String>) {
