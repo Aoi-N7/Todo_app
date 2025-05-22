@@ -127,7 +127,7 @@ fun Home_Screen(navController: NavController, viewModel: TaskViewModel = viewMod
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(8.dp))
                         .background(Color(0xFFEEEEEE))
-                        .clickable { CreateTask = true }
+                        .clickable { navController.navigate("Create_Screen") }  // クリック時の遷移先
                         .padding(8.dp),
                     color = Color(0xFFEEEEEE)
                 ) {
@@ -141,16 +141,11 @@ fun Home_Screen(navController: NavController, viewModel: TaskViewModel = viewMod
                             text = "現在の予定",
                             fontSize = 18.sp
                         )
-                        // プラスアイコン
-                        IconButton(
-                            onClick = { CreateTask = true }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = "追加",
-                                tint = Color(0xFFFF9800) // オレンジ色
-                            )
-                        }
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "追加",
+                            tint = Color(0xFFFF9800) // オレンジ色
+                        )
                     }
                 }
 
@@ -203,16 +198,11 @@ fun Home_Screen(navController: NavController, viewModel: TaskViewModel = viewMod
                             text = "タグ一覧",
                             fontSize = 18.sp
                         )
-                        // プラスボタン
-                        IconButton(
-                            onClick = { tagDialogOpen = true }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = "追加",
-                                tint = Color(0xFFFF9800) // オレンジ色
-                            )
-                        }
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "追加",
+                            tint = Color(0xFFFF9800) // オレンジ色
+                        )
                     }
                 }
 
