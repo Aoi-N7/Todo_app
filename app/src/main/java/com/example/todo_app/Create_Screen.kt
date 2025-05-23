@@ -5,10 +5,16 @@
 
 package com.example.todo_app
 
+import android.content.Context
+import android.os.Build
 import android.util.Log
+import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -20,14 +26,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import java.util.Calendar
 
 // 作成画面・編集画面
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewModel(), id: Int? = null) {
@@ -107,7 +116,6 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
 
             Spacer(modifier = Modifier.height(16.dp))     // 位置調整スペース
 
-
             // タグ名
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -161,12 +169,26 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
                 }
             }
 
+            Spacer(modifier = Modifier.height(16.dp))     // 位置調整スペース
+
             // 日付
-            InputField(
-                section = "日付",
-                value = date_in,
-                onValueChange = { date_in = it }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "日付",     // 入力項目
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal
+                )
+            }
+            // 日付
+            DateBox(
+                date = date_in,
+                onDateSelected = { date_in = it },
+                context = context
             )
+
 
             // 時間
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)   // テキストとフィールドの間のスペース
@@ -340,6 +362,55 @@ fun TimeInputField(
                 textStyle = TextStyle(
                     fontSize = 16.sp
                 )
+            )
+        }
+    }
+}
+
+// 年月日の入力ボックス
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun DateBox(
+    date: String,   // 現在選択されている日付（文字列形式）
+    onDateSelected: (String) -> Unit,
+    context: Context
+) {
+    // 今日の日付を取得（DatePickerDialog の初期値として使用）
+    val calendar = Calendar.getInstance()
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(Calendar.MONTH)
+    val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+    // 日付選択ダイアログ
+    val datePickerDialog = remember {
+        android.app.DatePickerDialog(
+            context,
+            { _, selectedYear, selectedMonth, selectedDay ->
+                // 日付が選択されたときの処理（YYYY/MM/DD形式)
+                val selectedDate =
+                    "%04d/%02d/%02d".format(selectedYear, selectedMonth + 1, selectedDay)
+                onDateSelected(selectedDate)
+            },
+            year, month, day // 初期表示の日付（今日）
+        )
+    }
+
+    // 日付表示用のボックス
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color(0xFFF5F5F5), shape = RoundedCornerShape(4.dp)) // 背景色と角丸
+            .clickable { datePickerDialog.show() } // クリックでカレンダーを表示
+            .padding(16.dp) // 内側の余白
+    ) {
+        // 横並びで日付テキストとアイコンを配置（今回はテキストのみ）
+        Row(
+            verticalAlignment = Alignment.CenterVertically, // 垂直方向の中央揃え
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = date, // 日付
+                color = Color.Black
             )
         }
     }
