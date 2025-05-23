@@ -140,7 +140,17 @@ fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel, id: 
             },
             onComplete = {
                 if (selectedTasks.isNotEmpty()) {
-                    //タスクやタグの完了処理の配置予定場所
+                    // 選択されたタスクの状態を反転させて newTasks に格納
+                    val newTasks = tasks.filter { selectedTasks.contains(it.id) }
+                        .map { task ->
+                            task.copy(state = !task.state)
+                        }
+
+                    // タスクの状態を反転してないタスクの削除処理
+                    viewModel.deleteItems(context, selectedTasks, selectedTags)
+
+                    // タスクの状態を反転させたタスクを代わりに追加
+                    viewModel.addTasks(context, newTasks)
 
                     // 選択中のタスクやタグのリセット
                     selectedTasks = emptyList()

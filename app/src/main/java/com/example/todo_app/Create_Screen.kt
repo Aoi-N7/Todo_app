@@ -180,7 +180,6 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
                         time = "$starttime_in〜$endtime_in",
                         tag = 0,
                         state = false
-
                     )
 
                     // タスクの追加

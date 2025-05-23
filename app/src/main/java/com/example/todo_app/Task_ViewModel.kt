@@ -39,10 +39,19 @@ class TaskViewModel : ViewModel() {
         _tasks.value = loadedTasks
     }
 
-    // タスク追加
+    // タスク追加(単体)
     fun addTask(context: Context, task: Task) {
         // リストへの追加
         _tasks.value = _tasks.value + task
+
+        // ファイルの更新
+        SaveFile(context, _tags.value, _tasks.value)
+    }
+
+    // タスク追加(複数)
+    fun addTasks(context: Context, tasks: List<Task>) {
+        // リストへの追加
+        _tasks.value = _tasks.value + tasks
 
         // ファイルの更新
         SaveFile(context, _tags.value, _tasks.value)
