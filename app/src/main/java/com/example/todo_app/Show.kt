@@ -251,6 +251,7 @@ fun ActionButtons(
 }
 
 // タグ作成ウィンドウの表示
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TagDialog(context: Context, viewModel: TaskViewModel, tagDialogOpen: Boolean, tags: List<Tag>, onDismiss: () -> Unit) {
     // タグ名の入力状態を保持する変数
@@ -308,38 +309,55 @@ fun TagDialog(context: Context, viewModel: TaskViewModel, tagDialogOpen: Boolean
                         TextField(
                             value = title,
                             onValueChange = { title = it },
-                            placeholder = { Text("タグ名") } // 未入力時の表示文字
+                            placeholder = { Text("タグ名") }, // 未入力時の表示文字
+                            colors = TextFieldDefaults.textFieldColors(
+                                containerColor = Color(0xFFF5F5F5)
+                            )
                         )
+
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        // 色選択用のテキストフィールド(入力不可)
-                        Box {
-                            OutlinedTextField(
+                        // カラーコードのボックス
+                        ExposedDropdownMenuBox(
+                            expanded = expanded,
+                            onExpandedChange = { expanded = !expanded } // クリックで展開/非展開を切り替え
+                        ) {
+                            // 選択中のタグ名を表示する読み取り専用のテキストフィールド
+                            TextField(
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable { expanded = true }, // クリックでドロップダウンを開く
-                                value = selectedColor ?: "", // 選択された色を表示
+                                    .menuAnchor()
+                                    .fillMaxWidth(),
+                                value = selectedColor ?: "", // 現在選択中のタグ名を表示
                                 onValueChange = {},
                                 readOnly = true,
                                 label = { Text("色") },
-                            )
-                        }
-
-                        // ドロップダウンメニュー本体
-                        DropdownMenu(
-                            expanded = expanded, // 展開状態
-                            onDismissRequest = { expanded = false } // 外側クリックで閉じる
-                        ) {
-                            // 色の選択肢をリスト表示
-                            colorOptions.forEach { color ->
-                                DropdownMenuItem(
-                                    text = { Text(text = color) }, // 表示テキスト
-                                    onClick = {
-                                        selectedColor = color // 色を選択
-                                        expanded = false // メニューを閉じる
-                                    }
+                                trailingIcon = {
+                                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) // 展開アイコン
+                                },
+                                colors = TextFieldDefaults.textFieldColors(
+                                    containerColor = colorMap[selectedColor] ?: Color(0xFFF5F5F5) // 選択された色を背景に反映
                                 )
+                            )
+
+                            // ドロップダウンメニューの中身
+                            ExposedDropdownMenu(
+                                expanded = expanded,
+                                onDismissRequest = { expanded = false }
+                            ) {
+                                // カラーコードをメニューとして表示
+                                colorOptions.forEach { colorName ->
+                                    DropdownMenuItem(
+                                        text = { Text(colorName) },
+                                        onClick = {
+                                            selectedColor = colorName
+                                            expanded = false
+                                        },
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .background(colorMap[colorName] ?: Color.White) // タグの背景
+                                    )
+                                }
                             }
                         }
 
