@@ -67,9 +67,6 @@ fun Home_Screen(navController: NavController, viewModel: TaskViewModel = viewMod
     // 現在のコンテキストを取得
     val context = LocalContext.current
 
-    // 新規タグ名
-    var NewTag by remember { mutableStateOf("") }
-
     // 更新
     viewModel.loadFromStorage(context)
 
@@ -236,6 +233,7 @@ fun Home_Screen(navController: NavController, viewModel: TaskViewModel = viewMod
             isSelectionActive = isSelectionActive,
             selectedTasks = selectedTasks,
             selectedTags = selectedTags,
+            showState = false,
             onDelete = {
                 //タスクやタグの削除処理
                 viewModel.deleteItems(context, selectedTasks, selectedTags)
@@ -263,7 +261,6 @@ fun Home_Screen(navController: NavController, viewModel: TaskViewModel = viewMod
                     selectedTags = emptyList()
                 }
             }
-
         )
 
         // タグ作成ウィンドウの表示

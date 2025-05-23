@@ -103,7 +103,7 @@ fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel, id: 
                     horizontalAlignment = Alignment.End
                 ) {
                     Text(
-                        text = "完了タスク",
+                        text = if (showState == false) "未完了タスク" else "完了タスク",  // showStateがtrueの場合は"未完了"、showStateがfalseの場合は"完了",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color.Gray
@@ -158,6 +158,7 @@ fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel, id: 
             isSelectionActive = isSelectionActive,
             selectedTasks = selectedTasks,
             selectedTags = selectedTags,
+            showState = showState,
             onDelete = {
                 //タスクやタグの削除処理
                 viewModel.deleteItems(context, selectedTasks, selectedTags)

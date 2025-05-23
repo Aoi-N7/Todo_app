@@ -200,6 +200,7 @@ fun ActionButtons(
     isSelectionActive: Boolean,  // 選択モードか判定
     selectedTasks: List<Int>,  // 選択中のタスクリスト
     selectedTags: List<Int>,  // 選択中のタグリスト
+    showState: Boolean,      // 表示しているタスクの状態を判定(true:完了、false:未完了)
     onDelete: () -> Unit,  // 削除処理
     onComplete: () -> Unit  // 完了処理
 ) {
@@ -231,16 +232,18 @@ fun ActionButtons(
                 }
 
                 // 完了ボタン(未完了への変更も可能にする予定)
-                Button(
-                    onClick = onComplete,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFFFF9C4) // 薄い黄色
-                    )
-                ) {
-                    Text(
-                        text = "完了",
-                        color = Color(0xFFF57F17) // 濃い黄色
-                    )
+                if(selectedTags.isEmpty()) {
+                    Button(
+                        onClick = onComplete,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFFFFF9C4) // 薄い黄色
+                        )
+                    ) {
+                        Text(
+                            text = if (showState == true) "未完了" else "完了",  // showStateがtrueの場合は"未完了"、showStateがfalseの場合は"完了"
+                            color = Color(0xFFF57F17) // 濃い黄色
+                        )
+                    }
                 }
             }
         }
