@@ -265,6 +265,9 @@ fun TagDialog(context: Context, viewModel: TaskViewModel, tagDialogOpen: Boolean
     // 全ての欄が入力されているか判定
     val isFormValid = title.isNotBlank() && selectedColor != null
 
+    // 使用中のIDリスト
+    val usedIds = tags.map { it.id }.toSet()
+
     // 色の選択肢リスト
     val colorOptions = listOf("赤", "黄", "青", "オレンジ", "緑", "紫", "ピンク")
 
@@ -350,7 +353,7 @@ fun TagDialog(context: Context, viewModel: TaskViewModel, tagDialogOpen: Boolean
 
                                 // 新しいタグを作成
                                 val newTag = Tag(
-                                    id = tags.size.toInt(),  // ID
+                                    id = generateSequence(0) { it + 1 }.first { it !in usedIds },    // 未使用かつ最小のIDを使用
                                     name = title,   // タグ名
                                     color = color   // カラーコード
                                 )
