@@ -58,6 +58,9 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
     // 選択されたタグのIDリスト
     var selectedTags by remember { mutableStateOf(listOf<Int>()) }
 
+    // タグ選択用ドロップダウンの展開状態を管理
+    var expanded by remember { mutableStateOf(false) }
+
     // 使用中のIDリスト
     val usedIds = tasks.map { it.id }.toSet()
 
@@ -102,12 +105,61 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
                 onValueChange = { task_in = it }
             )
 
+            Spacer(modifier = Modifier.height(16.dp))     // 位置調整スペース
+
+
             // タグ名
-            InputField(
-                section = "タグ",
-                value = tag_in.toString(),
-                onValueChange = { tag_in = it }
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "タグ名",     // 入力項目
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal
+                )
+            }
+            // タグ名のボックス
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = !expanded } // クリックで展開/非展開を切り替え
+            ) {
+                // 選択中のタグ名を表示する読み取り専用のテキストフィールド
+                TextField(
+                    value = tags.find { it.id == tag_in }?.name ?: "", // 現在選択中のタグ名を表示
+                    onValueChange = {},
+                    readOnly = true,
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) // 展開アイコン
+                    },
+                    modifier = Modifier
+                        .menuAnchor() // ドロップダウンの位置をこのフィールドに合わせる
+                        .fillMaxWidth(),
+                    colors = TextFieldDefaults.textFieldColors(
+                        containerColor = Color(0xFFF5F5F5) // 背景色
+                    )
+                )
+
+                // ドロップダウンメニューの中身
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false } // 外側をクリックしたら閉じる
+                ) {
+                    // タグ一覧をメニューとして表示
+                    tags.forEach { tag ->
+                        DropdownMenuItem(
+                            text = { Text(tag.name) }, // タグ名を表示
+                            onClick = {
+                                tag_in = tag.id // 選択されたタグのIDを格納
+                                expanded = false // メニューを閉じる
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(tag.color) // タグの背景
+                        )
+                    }
+                }
+            }
 
             // 日付
             InputField(
