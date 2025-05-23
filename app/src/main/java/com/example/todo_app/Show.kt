@@ -215,7 +215,7 @@ fun ActionButtons(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(12.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 // 削除ボタン
@@ -247,6 +247,7 @@ fun ActionButtons(
                 }
             }
         }
+        Spacer(modifier = Modifier.height(110.dp))
     }
 }
 
