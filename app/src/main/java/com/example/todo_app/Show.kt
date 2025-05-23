@@ -42,10 +42,13 @@ fun ShowTasks(
     selectedTasks: List<Int>,        // 選択されているタスクのIDリスト
     isTagSelectionActive: Boolean,      // 選択モード(タグ)か判定
     onTaskToggle: (Int) -> Unit,      // 選択モードの切り替え用
+    showState: Boolean,      // 表示するタスクの状態を判定(true:完了、false:未完了)
     nav: NavController
 ) {
+    val filteredTasks = tasks.filter { it.state == showState }
+
     // 今日のタスク一覧を表示
-    tasks.forEach { task ->
+    filteredTasks.forEach { task ->
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -114,6 +117,7 @@ fun ShowTasks(
             }
         }
     }
+
 }
 
 // タグ一覧の表示

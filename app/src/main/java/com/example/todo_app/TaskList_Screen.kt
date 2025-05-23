@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -50,6 +51,9 @@ fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel, id: 
     val isSelectionActive = selectedTasks.isNotEmpty() || selectedTags.isNotEmpty()
     val isTaskSelectionActive = selectedTasks.isNotEmpty()
     val isTagSelectionActive = selectedTags.isNotEmpty()
+
+    // 表示するタスクの状態(true:完了、false:未完了)
+    var showState by remember { mutableStateOf(false) }
 
     // 現在のコンテキストを取得
     val context = LocalContext.current
@@ -90,6 +94,29 @@ fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel, id: 
                         textAlign = TextAlign.Center
                     )
                 }
+
+                // 右上に「完了タスク」とスイッチを配置
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    Text(
+                        text = "完了タスク",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.Gray
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Switch(
+                        checked = showState,
+                        onCheckedChange = { showState = it },
+                        modifier = Modifier.scale(0.50f)    // スイッチの大きさ
+                    )
+                }
             }
 
             // 下半分: タスク一覧
@@ -118,6 +145,7 @@ fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel, id: 
                                     selectedTasks + taskId
                                 }
                             },
+                            showState = showState,
                             nav = navController
                         )
                     }

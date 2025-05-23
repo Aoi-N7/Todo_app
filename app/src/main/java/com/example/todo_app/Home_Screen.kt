@@ -168,6 +168,7 @@ fun Home_Screen(navController: NavController, viewModel: TaskViewModel = viewMod
                             selectedTasks + taskId
                         }
                     },
+                    showState = false,
                     nav = navController
                 )
 
