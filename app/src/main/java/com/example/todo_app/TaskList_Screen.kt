@@ -13,6 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,6 +57,9 @@ fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel, id: 
     // 表示するタスクの状態(true:完了、false:未完了)
     var showState by remember { mutableStateOf(false) }
 
+    // id に対応するタグ名を取得
+    val currentTagName = tags.find { it.id == id }?.name ?: "タグなし"
+
     // 現在のコンテキストを取得
     val context = LocalContext.current
 
@@ -87,7 +92,7 @@ fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel, id: 
                 ) {
                     // タグ名
                     Text(
-                        "タグ名",
+                        text = currentTagName,
                         color = Color.Black,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
@@ -116,6 +121,28 @@ fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel, id: 
                         onCheckedChange = { showState = it },
                         modifier = Modifier.scale(0.50f)    // スイッチの大きさ
                     )
+                }
+
+                // 左上に戻るボタン
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.TopStart),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    // 戻るボタン
+                    IconButton(
+                        onClick = { // 前の画面に遷移
+                            navController.popBackStack()
+                        },
+                        modifier = Modifier
+                            .padding(start = 8.dp, top = 8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "戻る",
+                            tint = Color.Gray
+                        )
+                    }
                 }
             }
 
@@ -185,8 +212,8 @@ fun TaskList_Screen(navController: NavController, viewModel: TaskViewModel, id: 
                     selectedTasks = emptyList()
                     selectedTags = emptyList()
                 }
-            }
+            },
+            modifier = Modifier
         )
     }
-
 }

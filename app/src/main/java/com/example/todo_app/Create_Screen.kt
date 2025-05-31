@@ -51,7 +51,7 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
     var task_in by remember { mutableStateOf(Edit_task?.title ?: "") }
 
     // タグの入力値
-    var tag_in by remember { mutableStateOf(Edit_task?.tag ?: "") }
+    var tag_in by remember { mutableStateOf(Edit_task?.tag) }
 
     // 日付の入力値
     var date_in by remember { mutableStateOf(Edit_task?.date ?: "") }
@@ -252,7 +252,7 @@ fun Create_Screen(navController: NavController, viewModel: TaskViewModel = viewM
                         title = task_in,
                         date = date_in,
                         time = "$starttime_in〜$endtime_in",
-                        tag = 0,
+                        tag = tag_in ?: 0,
                         state = false
                     )
 

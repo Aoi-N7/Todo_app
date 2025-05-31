@@ -5,6 +5,8 @@
 
 package com.example.todo_app
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.material3.*
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,6 +34,7 @@ enum class Screen {
 }
 
 //画面遷移の設定　どこのページへ移動するかnavControllerに定義する
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavRoute(){
     // NavControllerを定義
@@ -84,7 +87,7 @@ fun NavRoute(){
 fun TopBar(navController: NavController) {
     // トップバーの設定
     TopAppBar(
-        title = { Text("Todoアプリ　＞　ホーム画面") },
+        title = { Text("Todoアプリ") },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color(0xFFFEF4F4) // 背景色を#FEF4F4に設定
         )

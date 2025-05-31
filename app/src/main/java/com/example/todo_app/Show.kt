@@ -202,7 +202,8 @@ fun ActionButtons(
     selectedTags: List<Int>,  // 選択中のタグリスト
     showState: Boolean,      // 表示しているタスクの状態を判定(true:完了、false:未完了)
     onDelete: () -> Unit,  // 削除処理
-    onComplete: () -> Unit  // 完了処理
+    onComplete: () -> Unit,  // 完了処理
+    modifier: Modifier = Modifier
 ) {
     // タスクかタグを選択中のみ表示
     AnimatedVisibility(visible = isSelectionActive) {
